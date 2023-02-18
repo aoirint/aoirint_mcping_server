@@ -30,3 +30,8 @@ CREATE INDEX "bedrock_ping_records__bedrock_server_id__index"
   ON "bedrock_ping_records" 
   USING btree
   ("bedrock_server_id");
+
+CREATE INDEX "bedrock_ping_records__created_at__index"
+  ON "bedrock_ping_records" 
+  USING btree
+  ("created_at");
