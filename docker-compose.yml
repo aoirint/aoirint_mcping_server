@@ -20,6 +20,7 @@ services:
     restart: always
     environment:
       MCPING_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      MCPING_UPDATER_INTERVAL: 10
     depends_on:
       - postgres
 

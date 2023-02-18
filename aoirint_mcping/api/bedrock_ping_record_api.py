@@ -86,7 +86,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
 
             return BedrockPingRecord(
                 id=str(row[0]),
-                bedrock_server_id=row[1],
+                bedrock_server_id=str(row[1]),
                 timeout=row[2],
                 is_timeout=row[3],
                 version_protocol=row[4],
