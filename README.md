@@ -1,5 +1,10 @@
 # aoirint_mcping
 
+## TODO
+
+- Java server ping
+- Restrict write API access
+
 ## Migration
 
 This repository uses [golang-migrate](https://github.com/golang-migrate/migrate).
