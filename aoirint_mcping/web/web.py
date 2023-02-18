@@ -57,7 +57,7 @@ async def create_asgi_app(config: WebConfig):
 
 async def web_server_loop(config: WebConfig):
     uvicorn.run(
-        create_asgi_app(),
+        await create_asgi_app(config=config),
         host=config.host,
         port=config.port,
         reload=config.reload,
