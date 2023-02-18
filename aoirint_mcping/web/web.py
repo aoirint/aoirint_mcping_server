@@ -26,30 +26,26 @@ def create_asgi_app(config: WebConfig):
         bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
         return bedrock_server_api.get_bedrock_servers()
 
-    class CreateBedrockServerRequestBody(BaseModel):
-        name: str
-        host: str
-        port: int
-
     @app.post("/bedrock_server/create", response_model=BedrockServer)
-    async def bedrock_server_create(server: CreateBedrockServerRequestBody):
+    async def bedrock_server_create(
+        name: str,
+        host: str,
+        port: int,
+    ):
         bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
         return bedrock_server_api.create_bedrock_server(
-            name=server.name,
-            host=server.host,
-            port=server.port,
+            name=name,
+            host=host,
+            port=port,
         )
 
-    class LatestBedrockPingRecordRequestBody(BaseModel):
-        bedrock_server_id: str
-
     @app.post("/bedrock_ping_record/latest", response_model=BedrockPingRecord)
-    async def bedrock_ping_record_latest(params: LatestBedrockPingRecordRequestBody):
+    async def bedrock_ping_record_latest(bedrock_server_id: str):
         bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
             database_url=config.database_url
         )
         return bedrock_ping_record_api.get_latest_bedrock_ping_record(
-            bedrock_server_id=params.bedrock_server_id
+            bedrock_server_id=bedrock_server_id
         )
 
     return app
