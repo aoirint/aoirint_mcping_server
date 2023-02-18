@@ -63,7 +63,7 @@ def update_loop(config: UpdaterConfig) -> None:
 
     while True:
         schedule.run_pending()
-        time.sleep(0.1)
+        time.sleep(1)
 
 
 def main() -> None:
