@@ -76,7 +76,9 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                         LIMIT 1
                     """,
                 ),
-                bedrock_server_id=bedrock_server_id,
+                parameters=dict(
+                    bedrock_server_id=bedrock_server_id,
+                ),
             ).fetchone()
 
             if row is None:
@@ -143,21 +145,23 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                             ) RETURNING id
                         """,
                     ),
-                    bedrock_server_id=bedrock_server_id,
-                    timeout=timeout,
-                    is_timeout=is_timeout,
-                    version_protocol=version_protocol,
-                    version_brand=version_brand,
-                    version_version=version_version,
-                    players_online=players_online,
-                    players_max=players_max,
-                    motd=motd,
-                    map=map,
-                    gamemode=gamemode,
+                    parameters=dict(
+                        bedrock_server_id=bedrock_server_id,
+                        timeout=timeout,
+                        is_timeout=is_timeout,
+                        version_protocol=version_protocol,
+                        version_brand=version_brand,
+                        version_version=version_version,
+                        players_online=players_online,
+                        players_max=players_max,
+                        motd=motd,
+                        map=map,
+                        gamemode=gamemode,
+                    ),
                 ).fetchone()
 
                 return BedrockPingRecord(
-                    id=row["id"],
+                    id=str(row[0]),
                     bedrock_server_id=bedrock_server_id,
                     timeout=timeout,
                     is_timeout=is_timeout,

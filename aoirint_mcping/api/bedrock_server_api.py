@@ -79,13 +79,15 @@ class BedrockServerApiModelImpl(BedrockServerApiModel):
                             ) RETURNING id
                         """,
                     ),
-                    name=name,
-                    host=host,
-                    port=port,
+                    parameters=dict(
+                        name=name,
+                        host=host,
+                        port=port,
+                    ),
                 ).fetchone()
 
                 return BedrockServer(
-                    id=row["id"],
+                    id=str(row[0]),
                     name=name,
                     host=host,
                     port=port,
