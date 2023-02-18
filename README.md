@@ -4,7 +4,9 @@
 
 This repository uses [golang-migrate](https://github.com/golang-migrate/migrate).
 
-```
+To apply the migrations,
+
+```shell
 docker compose run --rm migrate -path=/migrations -database="postgres://postgres:postgres_password@postgres:5432/postgres?sslmode=disable" up
 ```
 
