@@ -39,7 +39,7 @@ def create_asgi_app(config: WebConfig):
             port=port,
         )
 
-    @app.post("/bedrock_ping_record/latest", response_model=BedrockPingRecord)
+    @app.post("/bedrock_ping_record/latest", response_model=BedrockPingRecord | None)
     async def bedrock_ping_record_latest(bedrock_server_id: str):
         bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
             database_url=config.database_url
