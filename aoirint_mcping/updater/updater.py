@@ -78,12 +78,12 @@ async def main() -> None:
     parser.add_argument(
         "--interval",
         type=float,
-        default=os.environ.get("MCPING_UPDATER_INTERVAL"),
+        default=os.environ.get("MCPING_UPDATER_INTERVAL", "300"),
     )
     parser.add_argument(
         "--timeout",
         type=float,
-        default=os.environ.get("MCPING_UPDATER_TIMEOUT"),
+        default=os.environ.get("MCPING_UPDATER_TIMEOUT", "3"),
     )
     parser.add_argument(
         "-l",
