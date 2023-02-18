@@ -26,6 +26,7 @@ python = "^3.10"
 pydantic = "^1.10.5"
 types-pyyaml = "^6.0.12.6"
 sqlalchemy = "^2.0.4"
+psycopg2-binary = "^2.9.5"
 
 [tool.poetry.group.web.dependencies]
 fastapi = "^0.92.0"
