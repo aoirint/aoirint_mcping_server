@@ -24,6 +24,8 @@ RUN gosu user pip3 install --no-cache-dir -r /work/requirements-updater.txt
 ADD ./aoirint_mcping /work/aoirint_mcping
 ADD ./aoirint_mcping_updater.py /work/
 
+ENV MCPING_UPDATER_LOOP=1
+
 CMD [ "gosu", "user", "python3", "aoirint_mcping_updater.py" ]
 
 
@@ -35,5 +37,7 @@ RUN gosu user pip3 install --no-cache-dir -r /work/requirements-web.txt
 
 ADD ./aoirint_mcping /work/aoirint_mcping
 ADD ./aoirint_mcping_web.py /work/
+
+ENV MCPING_WEB_HOST=0.0.0.0
 
 CMD [ "gosu", "user", "python3", "aoirint_mcping_web.py" ]

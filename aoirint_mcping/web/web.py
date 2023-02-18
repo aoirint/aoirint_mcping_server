@@ -2,9 +2,8 @@ import os
 from pathlib import Path
 
 import uvicorn
-import yaml
 from fastapi import FastAPI
-from pydantic import BaseModel, parse_obj_as
+from pydantic import BaseModel
 
 from ..api.bedrock_ping_record_api import (
     BedrockPingRecord,
@@ -17,7 +16,7 @@ class WebConfig(BaseModel):
     host: str
     port: int
     reload: bool
-    database_url: str | None
+    database_url: str
 
 
 async def create_asgi_app(config: WebConfig):
@@ -71,15 +70,9 @@ async def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c",
-        "--web_config_file",
-        type=Path,
-        default=os.environ.get("MCPING_WEB_CONFIG_FILE", "web_config.yaml"),
-    )
-    parser.add_argument(
         "--database_url",
         type=str,
-        default=os.environ.get("MCPING_WEB_DATABASE_URL", "sqlite3://db.sqlite3"),
+        default=os.environ.get("MCPING_WEB_DATABASE_URL"),
     )
     parser.add_argument(
         "--host",
@@ -94,16 +87,20 @@ async def main() -> None:
     parser.add_argument(
         "--reload",
         action="store_true",
+        default=os.environ.get("MCPING_WEB_RELOAD") == "1",
     )
     args = parser.parse_args()
 
-    config_file: Path = args.config_file
     database_url: str = args.database_url
+    host: str = args.host
+    port: int = args.port
+    reload: bool = args.reload
 
-    with config_file.open(mode="r", encoding="utf-8") as fp:
-        config = parse_obj_as(WebConfig, yaml.safe_load(fp))
+    config = WebConfig(
+        host=host,
+        port=port,
+        reload=reload,
+        database_url=database_url,
+    )
 
-    if database_url is not None:
-        config.database_url = args.database_url
-
-    await web_server_loop()
+    await web_server_loop(config=config)

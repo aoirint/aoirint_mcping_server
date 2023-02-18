@@ -1,6 +1,3 @@
-/updater_config.yaml
-/web_config.yaml
-
 /.env*
 
 /.python-version

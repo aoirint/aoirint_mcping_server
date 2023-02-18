@@ -4,12 +4,18 @@ services:
     build:
       context: .
       target: web-runtime-env
+    restart: always
+    environment:
+      MCPING_WEB_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
 
   updater:
     # image: aoirint/aoirint_mcping_updater:latest
     build:
       context: .
       target: updater-runtime-env
+    restart: always
+    environment:
+      MCPING_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
 
   postgres:
     image: postgres:15

@@ -1,12 +1,8 @@
 import os
 import time
-from pathlib import Path
 
 import schedule
-import yaml
-from pydantic import BaseModel, parse_obj_as
-from sqlalchemy import create_engine
-from sqlalchemy.sql import text as sql_text
+from pydantic import BaseModel
 
 from ..api.bedrock_ping_api import BedrockPingApiModelImpl, BedrockPingTimeoutError
 from ..api.bedrock_ping_record_api import BedrockPingRecordApiModelImpl
@@ -14,9 +10,9 @@ from ..api.bedrock_server_api import BedrockServerApiModelImpl
 
 
 class UpdaterConfig(BaseModel):
+    database_url: str
     interval: float
     timeout: float
-    database_url: str | None
 
 
 async def update(config: UpdaterConfig) -> None:
@@ -75,34 +71,40 @@ async def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c",
-        "--updater_config_file",
-        type=Path,
-        default=os.environ.get("MCPING_UPDATER_CONFIG_FILE", "updater_config.yaml"),
-    )
-    parser.add_argument(
         "--database_url",
         type=str,
-        default=os.environ.get("MCPING_UPDATER_DATABASE_URL", "sqlite3://db.sqlite3"),
+        default=os.environ.get("MCPING_UPDATER_DATABASE_URL"),
+    )
+    parser.add_argument(
+        "--interval",
+        type=float,
+        default=os.environ.get("MCPING_UPDATER_INTERVAL"),
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=os.environ.get("MCPING_UPDATER_TIMEOUT"),
     )
     parser.add_argument(
         "-l",
         "--loop",
         action="store_true",
+        default=os.environ.get("MCPING_UPDATER_LOOP") == "1",
     )
     args = parser.parse_args()
 
-    config_file: Path = args.config_file
     database_url: str = args.database_url
+    interval: float = args.interval
+    timeout: float = args.timeout
     loop: bool = args.loop
 
-    with config_file.open(mode="r", encoding="utf-8") as fp:
-        config = parse_obj_as(UpdaterConfig, yaml.safe_load(fp))
-
-    if database_url is not None:
-        config.database_url = args.database_url
+    config = UpdaterConfig(
+        database_url=database_url,
+        interval=interval,
+        timeout=timeout,
+    )
 
     if loop:
-        await update_loop()
+        await update_loop(config=config)
     else:
-        await update()
+        await update(config=config)
