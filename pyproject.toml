@@ -26,10 +26,15 @@ python = "^3.10"
 PyYAML = "^6.0"
 pydantic = "^1.10.5"
 types-pyyaml = "^6.0.12.6"
-mcstatus = "^10.0.1"
-fastapi = "^0.92.0"
-schedule = "^1.1.0"
 sqlalchemy = "^2.0.4"
+
+[tool.poetry.group.web.dependencies]
+fastapi = "^0.92.0"
+uvicorn = {extras = ["standard"], version = "^0.20.0"}
+
+[tool.poetry.group.updater.dependencies]
+schedule = "^1.1.0"
+mcstatus = "^10.0.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=0.900, <1.0"
