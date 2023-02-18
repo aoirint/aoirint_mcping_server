@@ -9,6 +9,8 @@ services:
       MCPING_WEB_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
     ports:
       - "${MCPING_WEB_HOST_PORT}:5000"
+    depends_on:
+      - postgres
 
   updater:
     # image: aoirint/aoirint_mcping_updater:latest
@@ -18,6 +20,8 @@ services:
     restart: always
     environment:
       MCPING_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:15
