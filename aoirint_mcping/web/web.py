@@ -18,7 +18,7 @@ class WebConfig(BaseModel):
     database_url: str
 
 
-async def create_asgi_app(config: WebConfig):
+def create_asgi_app(config: WebConfig):
     app = FastAPI()
 
     @app.post("/bedrock_server/list", response_model=list[BedrockServer])
@@ -55,16 +55,16 @@ async def create_asgi_app(config: WebConfig):
     return app
 
 
-async def web_server_loop(config: WebConfig):
+def web_server_loop(config: WebConfig):
     uvicorn.run(
-        await create_asgi_app(config=config),
+        create_asgi_app(config=config),
         host=config.host,
         port=config.port,
         reload=config.reload,
     )
 
 
-async def main() -> None:
+def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser()
@@ -102,4 +102,4 @@ async def main() -> None:
         database_url=database_url,
     )
 
-    await web_server_loop(config=config)
+    web_server_loop(config=config)

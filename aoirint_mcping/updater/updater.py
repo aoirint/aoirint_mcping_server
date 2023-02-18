@@ -15,7 +15,7 @@ class UpdaterConfig(BaseModel):
     timeout: float
 
 
-async def update(config: UpdaterConfig) -> None:
+def update(config: UpdaterConfig) -> None:
     bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
     bedrock_ping_api = BedrockPingApiModelImpl()
     bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
@@ -58,7 +58,7 @@ async def update(config: UpdaterConfig) -> None:
             )
 
 
-async def update_loop(config: UpdaterConfig) -> None:
+def update_loop(config: UpdaterConfig) -> None:
     schedule.every(interval=config.interval).seconds.do(update, config=config)
 
     while True:
@@ -66,7 +66,7 @@ async def update_loop(config: UpdaterConfig) -> None:
         time.sleep(0.1)
 
 
-async def main() -> None:
+def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser()
@@ -105,6 +105,6 @@ async def main() -> None:
     )
 
     if loop:
-        await update_loop(config=config)
+        update_loop(config=config)
     else:
-        await update(config=config)
+        update(config=config)
