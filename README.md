@@ -1,8 +1,18 @@
 # aoirint_mcping
 
+## Migration
+
+This repository uses [golang-migrate](https://github.com/golang-migrate/migrate).
+
 ```
 docker compose run --rm migrate -path=/migrations -database="postgres://postgres:postgres_password@postgres:5432/postgres?sslmode=disable" up
 ```
+
+## Library management
+
+This repository uses [Poetry](https://github.com/python-poetry/poetry).
+
+To dump `requirements*.txt`,
 
 ```shell
 poetry export --without-hashes --with web -o requirements-web.txt
