@@ -1,4 +1,8 @@
-/servers.yaml
+/updater_config.yaml
+/web_config.yaml
+
+/.env*
+
 /.python-version
 /venv
 __pycache__/

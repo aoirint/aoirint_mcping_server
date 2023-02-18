@@ -1,0 +1,26 @@
+services:
+  web:
+    # image: aoirint/aoirint_mcping_web:latest
+    build:
+      context: .
+      target: web-runtime-env
+
+  updater:
+    # image: aoirint/aoirint_mcping_updater:latest
+    build:
+      context: .
+      target: updater-runtime-env
+
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  migrate:
+    image: migrate/migrate:v4.15.2
+    command: "migrate version"
+    volumes:
+      - "./migrations:/migrations"
+    depends_on:
+      - postgres
