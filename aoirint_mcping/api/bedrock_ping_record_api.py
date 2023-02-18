@@ -75,8 +75,8 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                         ORDER BY "created_at" DESC
                         LIMIT 1
                     """,
-                    bedrock_server_id=bedrock_server_id,
                 ),
+                bedrock_server_id=bedrock_server_id,
             ).fetchone()
 
             if row is None:
@@ -142,18 +142,18 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                                 :gamemode
                             ) RETURNING id
                         """,
-                        bedrock_server_id=bedrock_server_id,
-                        timeout=timeout,
-                        is_timeout=is_timeout,
-                        version_protocol=version_protocol,
-                        version_brand=version_brand,
-                        version_version=version_version,
-                        players_online=players_online,
-                        players_max=players_max,
-                        motd=motd,
-                        map=map,
-                        gamemode=gamemode,
                     ),
+                    bedrock_server_id=bedrock_server_id,
+                    timeout=timeout,
+                    is_timeout=is_timeout,
+                    version_protocol=version_protocol,
+                    version_brand=version_brand,
+                    version_version=version_version,
+                    players_online=players_online,
+                    players_max=players_max,
+                    motd=motd,
+                    map=map,
+                    gamemode=gamemode,
                 ).fetchone()
 
                 return BedrockPingRecord(

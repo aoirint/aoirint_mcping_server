@@ -78,10 +78,10 @@ class BedrockServerApiModelImpl(BedrockServerApiModel):
                                 :port
                             ) RETURNING id
                         """,
-                        name=name,
-                        host=host,
-                        port=port,
                     ),
+                    name=name,
+                    host=host,
+                    port=port,
                 ).fetchone()
 
                 return BedrockServer(
