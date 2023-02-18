@@ -37,3 +37,12 @@ services:
       - "./migrations:/migrations"
     depends_on:
       - postgres
+
+  # (Optional) adminer: Browser database management
+  adminer:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - "${ADMINER_HOST_PORT}:8080"
+    depends_on:
+      - postgres
