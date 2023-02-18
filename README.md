@@ -3,6 +3,7 @@
 ## TODO
 
 - [x] Bedrock server ping
+- [ ] Prohibit duplicated server registration
 - [ ] Java server ping
 - [ ] Restrict write API access
 
