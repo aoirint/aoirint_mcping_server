@@ -2,8 +2,9 @@
 
 ## TODO
 
-- Java server ping
-- Restrict write API access
+- [x] Bedrock server ping
+- [ ] Java server ping
+- [ ] Restrict write API access
 
 ## Migration
 
