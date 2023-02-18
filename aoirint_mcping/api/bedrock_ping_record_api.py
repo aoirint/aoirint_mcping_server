@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from mcstatus import BedrockServer
 from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text as sql_text
