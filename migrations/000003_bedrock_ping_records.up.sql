@@ -26,7 +26,7 @@ CREATE TRIGGER refresh_bedrock_ping_records_updated_at_step3
   BEFORE UPDATE ON "bedrock_ping_records" FOR EACH ROW
   EXECUTE PROCEDURE refresh_updated_at_step3();
 
-CREATE INDEX "bedrock_ping_records__bedrock_server_id__key"
+CREATE INDEX "bedrock_ping_records__bedrock_server_id__index"
   ON "bedrock_ping_records" 
   USING btree
   ("bedrock_server_id");
