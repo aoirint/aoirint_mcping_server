@@ -1,6 +1,6 @@
 CREATE TABLE "bedrock_ping_records" (
   "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "bedrock_server_id" UUID NOT NULL REFERENCES "bedrock_servers"("id"),
+  "bedrock_server_id" UUID NOT NULL REFERENCES "bedrock_servers"("id") ON DELETE CASCADE,
   "timeout" NUMERIC NOT NULL,
   "is_timeout" BOOLEAN NOT NULL,
   "version_protocol" INTEGER,
