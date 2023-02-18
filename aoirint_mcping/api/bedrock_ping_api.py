@@ -13,6 +13,7 @@ class BedrockPingResult(BaseModel):
     version_protocol: int
     version_brand: str
     version_version: str
+    latency: float
     players_online: int
     players_max: int
     motd: str
@@ -36,6 +37,7 @@ class BedrockPingApiModelImpl(BedrockPingApiModel):
                 version_protocol=response.version.protocol,
                 version_brand=response.version.brand,
                 version_version=response.version.version,
+                latency=response.latency,
                 players_online=response.players_online,
                 players_max=response.players_max,
                 motd=response.motd,

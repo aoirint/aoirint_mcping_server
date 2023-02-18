@@ -13,6 +13,7 @@ class BedrockPingRecord(BaseModel):
     version_protocol: int | None
     version_brand: str | None
     version_version: str | None
+    latency: float | None
     players_online: int | None
     players_max: int | None
     motd: str | None
@@ -36,6 +37,7 @@ class BedrockPingRecordApiModel(ABC):
         version_protocol: int | None,
         version_brand: str | None,
         version_version: str | None,
+        latency: float | None,
         players_online: int | None,
         players_max: int | None,
         motd: str | None,
@@ -64,6 +66,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                             "version_protocol",
                             "version_brand",
                             "version_version",
+                            "latency",
                             "players_online",
                             "players_max",
                             "motd",
@@ -92,11 +95,12 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                 version_protocol=row[4],
                 version_brand=row[5],
                 version_version=row[6],
-                players_online=row[7],
-                players_max=row[8],
-                motd=row[9],
-                map=row[10],
-                gamemode=row[11],
+                latency=row[7],
+                players_online=row[8],
+                players_max=row[9],
+                motd=row[10],
+                map=row[11],
+                gamemode=row[12],
             )
 
     def create_bedrock_ping_record(
@@ -107,6 +111,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
         version_protocol: int | None,
         version_brand: str | None,
         version_version: str | None,
+        latency: float | None,
         players_online: int | None,
         players_max: int | None,
         motd: str | None,
@@ -125,6 +130,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                                 "version_protocol",
                                 "version_brand",
                                 "version_version",
+                                "latency",
                                 "players_online",
                                 "players_max",
                                 "motd",
@@ -137,6 +143,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                                 :version_protocol,
                                 :version_brand,
                                 :version_version,
+                                :latency,
                                 :players_online,
                                 :players_max,
                                 :motd,
@@ -152,6 +159,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                         version_protocol=version_protocol,
                         version_brand=version_brand,
                         version_version=version_version,
+                        latency=latency,
                         players_online=players_online,
                         players_max=players_max,
                         motd=motd,
@@ -168,6 +176,7 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                     version_protocol=version_protocol,
                     version_brand=version_brand,
                     version_version=version_version,
+                    latency=latency,
                     players_online=players_online,
                     players_max=players_max,
                     motd=motd,
