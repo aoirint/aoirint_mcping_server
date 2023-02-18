@@ -85,18 +85,18 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                 return None
 
             return BedrockPingRecord(
-                id=row["id"],
-                bedrock_server_id=row["bedrock_server_id"],
-                timeout=row["timeout"],
-                is_timeout=row["is_timeout"],
-                version_protocol=row["version_protocol"],
-                version_brand=row["version_brand"],
-                version_version=row["version_version"],
-                players_online=row["players_online"],
-                players_max=row["players_max"],
-                motd=row["motd"],
-                map=row["map"],
-                gamemode=row["gamemode"],
+                id=str(row[0]),
+                bedrock_server_id=row[1],
+                timeout=row[2],
+                is_timeout=row[3],
+                version_protocol=row[4],
+                version_brand=row[5],
+                version_version=row[6],
+                players_online=row[7],
+                players_max=row[8],
+                motd=row[9],
+                map=row[10],
+                gamemode=row[11],
             )
 
     def create_bedrock_ping_record(

@@ -33,7 +33,7 @@ class BedrockServerApiModelImpl(BedrockServerApiModel):
 
     def get_bedrock_servers(self) -> list[BedrockServer]:
         with self.engine.connect() as conn:
-            row = conn.execute(
+            rows = conn.execute(
                 sql_text(
                     """
                         SELECT
@@ -45,16 +45,18 @@ class BedrockServerApiModelImpl(BedrockServerApiModel):
                         ORDER BY "created_at" ASC
                     """,
                 ),
-            ).fetchone()
+            ).fetchall()
 
-            if row is None:
-                return None
-
-            return BedrockServer(
-                id=row["id"],
-                name=row["name"],
-                host=row["host"],
-                port=row["port"],
+            return list(
+                map(
+                    lambda row: BedrockServer(
+                        id=str(row[0]),
+                        name=row[1],
+                        host=row[2],
+                        port=row[3],
+                    ),
+                    rows,
+                )
             )
 
     def create_bedrock_server(
