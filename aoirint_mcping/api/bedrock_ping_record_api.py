@@ -24,8 +24,10 @@ class BedrockPingRecord(BaseModel):
 class BedrockPingRecordApiModel(ABC):
     @abstractmethod
     def get_latest_bedrock_ping_record(
-        self, bedrock_server_id: str
-    ) -> BedrockPingRecord | None:
+        self,
+        bedrock_server_id: str,
+        count: int,
+    ) -> list[BedrockPingRecord]:
         ...
 
     @abstractmethod
@@ -52,10 +54,12 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
         self.engine = create_engine(url=database_url)
 
     def get_latest_bedrock_ping_record(
-        self, bedrock_server_id: str
-    ) -> BedrockPingRecord | None:
+        self,
+        bedrock_server_id: str,
+        count: int,
+    ) -> list[BedrockPingRecord]:
         with self.engine.connect() as conn:
-            row = conn.execute(
+            rows = conn.execute(
                 sql_text(
                     """
                         SELECT
@@ -76,31 +80,34 @@ class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
                         WHERE
                             "bedrock_server_id" = :bedrock_server_id
                         ORDER BY "created_at" DESC
-                        LIMIT 1
+                        LIMIT :count
                     """,
                 ),
                 parameters=dict(
                     bedrock_server_id=bedrock_server_id,
+                    count=count,
                 ),
-            ).fetchone()
+            ).fetchall()
 
-            if row is None:
-                return None
-
-            return BedrockPingRecord(
-                id=str(row[0]),
-                bedrock_server_id=str(row[1]),
-                timeout=row[2],
-                is_timeout=row[3],
-                version_protocol=row[4],
-                version_brand=row[5],
-                version_version=row[6],
-                latency=row[7],
-                players_online=row[8],
-                players_max=row[9],
-                motd=row[10],
-                map=row[11],
-                gamemode=row[12],
+            return list(
+                map(
+                    lambda row: BedrockPingRecord(
+                        id=str(row[0]),
+                        bedrock_server_id=str(row[1]),
+                        timeout=row[2],
+                        is_timeout=row[3],
+                        version_protocol=row[4],
+                        version_brand=row[5],
+                        version_version=row[6],
+                        latency=row[7],
+                        players_online=row[8],
+                        players_max=row[9],
+                        motd=row[10],
+                        map=row[11],
+                        gamemode=row[12],
+                    ),
+                    rows,
+                ),
             )
 
     def create_bedrock_ping_record(

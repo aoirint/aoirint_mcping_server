@@ -40,20 +40,20 @@ def create_asgi_app(config: WebConfig):
         )
 
     @app.post("/bedrock_ping_record/latest", response_model=list[BedrockPingRecord])
-    async def bedrock_ping_record_latest(bedrock_server_id: str):
+    async def bedrock_ping_record_latest(
+        bedrock_server_id: str,
+        count: int = 5,
+    ):
+        if count > 20:
+            raise Exception('"count" must be less than or equal to 100')
+
         bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
             database_url=config.database_url
         )
 
-        bedrock_ping_record = bedrock_ping_record_api.get_latest_bedrock_ping_record(
-            bedrock_server_id=bedrock_server_id
-        )
-        return (
-            [
-                bedrock_ping_record,
-            ]
-            if bedrock_ping_record is not None
-            else []
+        return bedrock_ping_record_api.get_latest_bedrock_ping_record(
+            bedrock_server_id=bedrock_server_id,
+            count=count,
         )
 
     return app
