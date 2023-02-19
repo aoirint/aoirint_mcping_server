@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1.4
 FROM python:3.10 AS base-env
 
+ENV PYTHONUNBUFFERED=1
+
 RUN <<EOF
     apt-get update
     apt-get install -y \
