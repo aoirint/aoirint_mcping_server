@@ -1,4 +1,4 @@
-name: Build Docker
+name: Build
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
 env:
   IMAGE_NAME_PREFIX: aoirint/aoirint_mcping_server
   IMAGE_TAG: ${{ github.event.release.tag_name != '' && github.event.release.tag_name || 'latest' }}
+  PYTHON_VERSION: '3.10.10'
 
 jobs:
   docker-build-and-push:
@@ -20,12 +21,18 @@ jobs:
       matrix:
         include:
           -
+            base_image: 'ubuntu:focal'
+            base_runtime_image: 'ubuntu:focal'
             image_name_suffix: 'web_api'
             image_target: 'web-api-runtime-env'
           -
+            base_image: 'ubuntu:focal'
+            base_runtime_image: 'ubuntu:focal'
             image_name_suffix: 'bedrock_updater'
             image_target: 'bedrock-updater-runtime-env'
           -
+            base_image: 'ubuntu:focal'
+            base_runtime_image: 'ubuntu:focal'
             image_name_suffix: 'java_updater'
             image_target: 'java-updater-runtime-env'
 
@@ -54,5 +61,9 @@ jobs:
           push: true
           target: ${{ matrix.image_target }}
           tags: ${{ env.IMAGE_NAME_AND_TAG }}
+          build-args: |
+            BASE_IMAGE=${{ matrix.base_image }}
+            BASE_RUNTIME_IMAGE=${{ matrix.base_runtime_image }}
+            PYTHON_VERSION=${{ env.PYTHON_VERSION }}
           cache-from: type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache
           cache-to: type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache,mode=max

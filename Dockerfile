@@ -1,7 +1,53 @@
 # syntax=docker/dockerfile:1.4
-FROM python:3.10 AS base-env
+ARG BASE_IMAGE=ubuntu:focal
+ARG BASE_RUNTIME_IMAGE=${BASE_IMAGE}
 
+FROM ${BASE_IMAGE} AS python-env
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG PYENV_VERSION=v2.3.13
+ARG PYTHON_VERSION=3.10.10
+
+RUN <<EOF
+    apt-get update
+
+    apt-get install -y \
+        build-essential \
+        libssl-dev \
+        zlib1g-dev \
+        libbz2-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        curl \
+        libncursesw5-dev \
+        xz-utils \
+        tk-dev \
+        libxml2-dev \
+        libxmlsec1-dev \
+        libffi-dev \
+        liblzma-dev
+
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+EOF
+
+RUN <<EOF
+  git clone https://github.com/pyenv/pyenv.git /opt/pyenv
+  git checkout "${PYENV_VERSION}"
+
+  PREFIX=/opt/python-build /opt/pyenv/plugins/python-build/install.sh
+  /opt/python-build/bin/python-build -v "${PYTHON_VERSION}" /opt/python
+
+  rm -rf /opt/python-build /opt/pyenv
+EOF
+
+
+FROM ${BASE_RUNTIME_IMAGE} AS base-env
+
+ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
+
+COPY --from=python-env /opt/python/ /usr/local/
 
 RUN <<EOF
     apt-get update
@@ -29,7 +75,6 @@ ADD ./aoirint_mcping_bedrock_updater.py /work/
 ENV MCPING_BEDROCK_UPDATER_LOOP=1
 
 CMD [ "gosu", "user", "python3", "aoirint_mcping_bedrock_updater.py" ]
-
 
 
 FROM base-env AS java-updater-runtime-env
