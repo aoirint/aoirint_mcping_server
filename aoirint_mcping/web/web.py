@@ -4,11 +4,11 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from ..repository.bedrock_ping_record_repository import (
+from ..lib.repository.bedrock_ping_record_repository import (
     BedrockPingRecord,
     BedrockPingRecordRepositoryImpl,
 )
-from ..repository.bedrock_server_repository import BedrockServer, BedrockServerRepositoryImpl
+from ..lib.repository.bedrock_server_repository import BedrockServer, BedrockServerRepositoryImpl
 
 
 class WebConfig(BaseModel):
