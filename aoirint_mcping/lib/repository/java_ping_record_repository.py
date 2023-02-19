@@ -106,7 +106,7 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                             SELECT
                                 "id",
                                 "player_id",
-                                "name",
+                                "name"
                             FROM "java_ping_record_players"
                             WHERE
                                 "java_ping_record_id" = :java_ping_record_id
