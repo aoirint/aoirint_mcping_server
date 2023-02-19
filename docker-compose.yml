@@ -7,6 +7,8 @@ services:
     restart: always
     environment:
       MCPING_WEB_API_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      MCPING_WEB_API_READ_API_KEY: ${MCPING_WEB_API_READ_API_KEY}
+      MCPING_WEB_API_WRITE_API_KEY: ${MCPING_WEB_API_WRITE_API_KEY}
     ports:
       - "${MCPING_WEB_API_HOST_PORT}:5000"
     depends_on:

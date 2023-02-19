@@ -2,7 +2,7 @@ import logging
 import os
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
 from ..lib.repository.bedrock_ping_record_repository import (
@@ -27,6 +27,8 @@ class WebApiConfig(BaseModel):
     host: str
     port: int
     reload: bool
+    read_api_key: str | None
+    write_api_key: str | None
     max_latest_count: int
     database_url: str
 
@@ -34,14 +36,42 @@ class WebApiConfig(BaseModel):
 def create_asgi_app(config: WebApiConfig):
     app = FastAPI()
 
-    @app.post("/bedrock_server/list", response_model=list[BedrockServer])
+    async def verify_read_api_key(x_read_api_key: str | None = Header(None)):
+        # If config.read_api_key is not defined, everyone can write.
+        if config.read_api_key is None or config.read_api_key == "":
+            return x_read_api_key
+
+        if x_read_api_key != config.read_api_key:
+            raise HTTPException(status_code=400, detail="X-Read-Api-Key header invalid")
+        return x_read_api_key
+
+    async def verify_write_api_key(x_write_api_key: str | None = Header(None)):
+        # If config.write_api_key is not defined, everyone can write.
+        if config.write_api_key is None or config.write_api_key == "":
+            return x_write_api_key
+
+        if x_write_api_key != config.write_api_key:
+            raise HTTPException(
+                status_code=400, detail="X-Write-Api-Key header invalid"
+            )
+        return x_write_api_key
+
+    @app.post(
+        "/bedrock_server/list",
+        response_model=list[BedrockServer],
+        dependencies=[Depends(verify_read_api_key)],
+    )
     async def bedrock_server_list():
         bedrock_server_api = BedrockServerRepositoryImpl(
             database_url=config.database_url
         )
         return bedrock_server_api.get_bedrock_servers()
 
-    @app.post("/bedrock_server/create", response_model=BedrockServer)
+    @app.post(
+        "/bedrock_server/create",
+        response_model=BedrockServer,
+        dependencies=[Depends(verify_write_api_key)],
+    )
     async def bedrock_server_create(
         name: str,
         host: str,
@@ -56,7 +86,11 @@ def create_asgi_app(config: WebApiConfig):
             port=port,
         )
 
-    @app.post("/bedrock_ping_record/latest", response_model=list[BedrockPingRecord])
+    @app.post(
+        "/bedrock_ping_record/latest",
+        response_model=list[BedrockPingRecord],
+        dependencies=[Depends(verify_read_api_key)],
+    )
     async def bedrock_ping_record_latest(
         bedrock_server_id: str,
         count: int = 5,
@@ -75,12 +109,20 @@ def create_asgi_app(config: WebApiConfig):
             count=count,
         )
 
-    @app.post("/java_server/list", response_model=list[JavaServer])
+    @app.post(
+        "/java_server/list",
+        response_model=list[JavaServer],
+        dependencies=[Depends(verify_read_api_key)],
+    )
     async def java_server_list():
         java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
         return java_server_api.get_java_servers()
 
-    @app.post("/java_server/create", response_model=JavaServer)
+    @app.post(
+        "/java_server/create",
+        response_model=JavaServer,
+        dependencies=[Depends(verify_write_api_key)],
+    )
     async def java_server_create(
         name: str,
         host: str,
@@ -93,7 +135,11 @@ def create_asgi_app(config: WebApiConfig):
             port=port,
         )
 
-    @app.post("/java_ping_record/latest", response_model=list[JavaPingRecord])
+    @app.post(
+        "/java_ping_record/latest",
+        response_model=list[JavaPingRecord],
+        dependencies=[Depends(verify_read_api_key)],
+    )
     async def java_ping_record_latest(
         java_server_id: str,
         count: int = 5,
@@ -149,6 +195,16 @@ def main() -> None:
         default=os.environ.get("MCPING_WEB_API_RELOAD") == "1",
     )
     parser.add_argument(
+        "--read_api_key",
+        type=str,
+        default=os.environ.get("MCPING_WEB_API_READ_API_KEY"),
+    )
+    parser.add_argument(
+        "--write_api_key",
+        type=str,
+        default=os.environ.get("MCPING_WEB_API_WRITE_API_KEY"),
+    )
+    parser.add_argument(
         "--max_latest_count",
         type=int,
         default=os.environ.get("MCPING_WEB_API_MAX_LATEST_COUNT", "20"),
@@ -171,6 +227,8 @@ def main() -> None:
     host: str = args.host
     port: int = args.port
     reload: bool = args.reload
+    read_api_key: str | None = args.read_api_key
+    write_api_key: str | None = args.write_api_key
     max_latest_count: int = args.max_latest_count
 
     logging.basicConfig(
@@ -182,6 +240,8 @@ def main() -> None:
         host=host,
         port=port,
         reload=reload,
+        read_api_key=read_api_key,
+        write_api_key=write_api_key,
         max_latest_count=max_latest_count,
         database_url=database_url,
     )
