@@ -1,9 +1,17 @@
-/.env*
-
+# Virtualenv
 /.python-version
 /venv
+
+# Cache
 __pycache__/
 .pytest_cache/
 .mypy_cache/
 
+# PyInstaller
+/build
+/dist
+*.spec
+
+# Docker Compose
 /volumes
+/.env*
