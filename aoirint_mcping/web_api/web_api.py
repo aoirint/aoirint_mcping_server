@@ -13,6 +13,11 @@ from ..lib.repository.bedrock_server_repository import (
     BedrockServer,
     BedrockServerRepositoryImpl,
 )
+from ..lib.repository.java_ping_record_repository import (
+    JavaPingRecord,
+    JavaPingRecordRepositoryImpl,
+)
+from ..lib.repository.java_server_repository import JavaServer, JavaServerRepositoryImpl
 from ..lib.util.logging_utility import setup_logger
 
 logger = logging.Logger(name="web_api")
@@ -22,6 +27,7 @@ class WebApiConfig(BaseModel):
     host: str
     port: int
     reload: bool
+    max_latest_count: int
     database_url: str
 
 
@@ -55,8 +61,10 @@ def create_asgi_app(config: WebApiConfig):
         bedrock_server_id: str,
         count: int = 5,
     ):
-        if count > 20:
-            raise Exception('"count" must be less than or equal to 100')
+        if count > config.max_latest_count:
+            raise Exception(
+                f'"count" must be less than or equal to {config.max_latest_count}'
+            )
 
         bedrock_ping_record_api = BedrockPingRecordRepositoryImpl(
             database_url=config.database_url
@@ -64,6 +72,43 @@ def create_asgi_app(config: WebApiConfig):
 
         return bedrock_ping_record_api.get_latest_bedrock_ping_record(
             bedrock_server_id=bedrock_server_id,
+            count=count,
+        )
+
+    @app.post("/java_server/list", response_model=list[JavaServer])
+    async def java_server_list():
+        java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
+        return java_server_api.get_java_servers()
+
+    @app.post("/java_server/create", response_model=JavaServer)
+    async def java_server_create(
+        name: str,
+        host: str,
+        port: int,
+    ):
+        java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
+        return java_server_api.create_java_server(
+            name=name,
+            host=host,
+            port=port,
+        )
+
+    @app.post("/java_ping_record/latest", response_model=list[JavaPingRecord])
+    async def java_ping_record_latest(
+        java_server_id: str,
+        count: int = 5,
+    ):
+        if count > config.max_latest_count:
+            raise Exception(
+                f'"count" must be less than or equal to {config.max_latest_count}'
+            )
+
+        java_ping_record_api = JavaPingRecordRepositoryImpl(
+            database_url=config.database_url
+        )
+
+        return java_ping_record_api.get_latest_java_ping_record(
+            java_server_id=java_server_id,
             count=count,
         )
 
@@ -104,6 +149,11 @@ def main() -> None:
         default=os.environ.get("MCPING_WEB_API_RELOAD") == "1",
     )
     parser.add_argument(
+        "--max_latest_count",
+        type=int,
+        default=os.environ.get("MCPING_WEB_API_MAX_LATEST_COUNT", "20"),
+    )
+    parser.add_argument(
         "--log_level",
         type=int,
         default=os.environ.get("MCPING_WEB_API_LOG_LEVEL", logging.INFO),
@@ -121,6 +171,7 @@ def main() -> None:
     host: str = args.host
     port: int = args.port
     reload: bool = args.reload
+    max_latest_count: int = args.max_latest_count
 
     logging.basicConfig(
         level=log_level,
@@ -131,6 +182,7 @@ def main() -> None:
         host=host,
         port=port,
         reload=reload,
+        max_latest_count=max_latest_count,
         database_url=database_url,
     )
 
