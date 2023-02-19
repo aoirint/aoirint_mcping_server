@@ -69,12 +69,11 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
         count: int,
     ) -> list[JavaPingRecord]:
         with self.engine.connect() as conn:
-            rows = conn.execute(
+            ping_record_rows = conn.execute(
                 sql_text(
                     """
                         SELECT
                             "id",
-                            "java_server_id",
                             "timeout",
                             "is_timeout",
                             "version_protocol",
@@ -97,24 +96,55 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                 ),
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: JavaPingRecord(
-                        id=str(row[0]),
-                        java_server_id=str(row[1]),
-                        timeout=row[2],
-                        is_timeout=row[3],
-                        version_protocol=row[4],
-                        version_name=row[5],
-                        latency=row[6],
-                        players_online=row[7],
-                        players_max=row[8],
-                        description=row[9],
-                        favicon=row[10],
+            ping_records: list[JavaPingRecord] = []
+            for ping_record_row in ping_record_rows:
+                ping_record_id = str(ping_record_row[0])
+
+                player_rows = conn.execute(
+                    sql_text(
+                        """
+                            SELECT
+                                "id",
+                                "player_id",
+                                "name",
+                            FROM "java_ping_record_players"
+                            WHERE
+                                "java_ping_record_id" = :java_ping_record_id
+                        """,
                     ),
-                    rows,
-                ),
-            )
+                    parameters=dict(
+                        java_ping_record_id=ping_record_id,
+                    ),
+                ).fetchall()
+
+                ping_records.append(
+                    JavaPingRecord(
+                        id=ping_record_id,
+                        java_server_id=java_server_id,
+                        timeout=ping_record_row[1],
+                        is_timeout=ping_record_row[2],
+                        version_protocol=ping_record_row[3],
+                        version_name=ping_record_row[4],
+                        latency=ping_record_row[5],
+                        players_online=ping_record_row[6],
+                        players_max=ping_record_row[7],
+                        players_sample=list(
+                            map(
+                                lambda player_row: JavaPingRecordPlayer(
+                                    id=str(player_row[0]),
+                                    java_ping_record_id=ping_record_id,
+                                    player_id=player_row[1],
+                                    name=player_row[2],
+                                ),
+                                player_rows,
+                            )
+                        ),
+                        description=ping_record_row[8],
+                        favicon=ping_record_row[9],
+                    )
+                )
+
+            return ping_records
 
     def create_java_ping_record(
         self,
