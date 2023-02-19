@@ -7,7 +7,7 @@
 - [x] Java server ping
 - [ ] Restrict write API access
 
-## Migration
+## Database migration
 
 This repository uses [golang-migrate](https://github.com/golang-migrate/migrate).
 
