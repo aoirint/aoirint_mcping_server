@@ -28,7 +28,7 @@ types-pyyaml = "^6.0.12.6"
 sqlalchemy = "^2.0.4"
 psycopg2-binary = "^2.9.5"
 
-[tool.poetry.group.web.dependencies]
+[tool.poetry.group.web-api.dependencies]
 fastapi = "^0.92.0"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 

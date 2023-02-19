@@ -11,14 +11,14 @@ from ..lib.repository.bedrock_ping_record_repository import (
 from ..lib.repository.bedrock_server_repository import BedrockServer, BedrockServerRepositoryImpl
 
 
-class WebConfig(BaseModel):
+class WebApiConfig(BaseModel):
     host: str
     port: int
     reload: bool
     database_url: str
 
 
-def create_asgi_app(config: WebConfig):
+def create_asgi_app(config: WebApiConfig):
     app = FastAPI()
 
     @app.post("/bedrock_server/list", response_model=list[BedrockServer])
@@ -59,7 +59,7 @@ def create_asgi_app(config: WebConfig):
     return app
 
 
-def web_server_loop(config: WebConfig):
+def web_api_loop(config: WebApiConfig):
     uvicorn.run(
         create_asgi_app(config=config),
         host=config.host,
@@ -75,22 +75,22 @@ def main() -> None:
     parser.add_argument(
         "--database_url",
         type=str,
-        default=os.environ.get("MCPING_WEB_DATABASE_URL"),
+        default=os.environ.get("MCPING_WEB_API_DATABASE_URL"),
     )
     parser.add_argument(
         "--host",
         type=str,
-        default=os.environ.get("MCPING_WEB_HOST", "0.0.0.0"),
+        default=os.environ.get("MCPING_WEB_API_HOST", "0.0.0.0"),
     )
     parser.add_argument(
         "--port",
         type=int,
-        default=os.environ.get("MCPING_WEB_PORT", "5000"),
+        default=os.environ.get("MCPING_WEB_API_PORT", "5000"),
     )
     parser.add_argument(
         "--reload",
         action="store_true",
-        default=os.environ.get("MCPING_WEB_RELOAD") == "1",
+        default=os.environ.get("MCPING_WEB_API_RELOAD") == "1",
     )
     args = parser.parse_args()
 
@@ -99,11 +99,11 @@ def main() -> None:
     port: int = args.port
     reload: bool = args.reload
 
-    config = WebConfig(
+    config = WebApiConfig(
         host=host,
         port=port,
         reload=reload,
         database_url=database_url,
     )
 
-    web_server_loop(config=config)
+    web_api_loop(config=config)
