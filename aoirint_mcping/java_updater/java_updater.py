@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -13,6 +14,9 @@ from ..lib.repository.java_ping_repository import (
     JavaPingTimeoutError,
 )
 from ..lib.repository.java_server_repository import JavaServerRepositoryImpl
+from ..lib.util.logging_utility import setup_logging_format_time_with_timezone
+
+logger = logging.Logger(name="java_updater")
 
 
 class JavaUpdaterConfig(BaseModel):
@@ -29,6 +33,7 @@ def update(config: JavaUpdaterConfig) -> None:
     )
 
     for java_server in java_server_api.get_java_servers():
+        logger.info(f"Ping {java_server.host}:{java_server.port} ({java_server.id})")
         try:
             ping_result = java_ping_api.ping(
                 host=java_server.host,
@@ -105,12 +110,24 @@ def main() -> None:
         action="store_true",
         default=os.environ.get("MCPING_JAVA_UPDATER_LOOP") == "1",
     )
+    parser.add_argument(
+        "--log_level",
+        type=int,
+        default=os.environ.get("MCPING_JAVA_UPDATER_LOG_LEVEL", logging.INFO),
+    )
     args = parser.parse_args()
 
+    log_level: int = args.log_level
     database_url: str = args.database_url
     interval: float = args.interval
     timeout: float = args.timeout
     loop: bool = args.loop
+
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s %(levelname)s: %(message)s",
+    )
+    setup_logging_format_time_with_timezone()
 
     config = JavaUpdaterConfig(
         database_url=database_url,

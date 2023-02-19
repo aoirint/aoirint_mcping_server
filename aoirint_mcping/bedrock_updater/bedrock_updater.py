@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -12,6 +13,9 @@ from ..lib.repository.bedrock_ping_repository import (
     BedrockPingTimeoutError,
 )
 from ..lib.repository.bedrock_server_repository import BedrockServerRepositoryImpl
+from ..lib.util.logging_utility import setup_logging_format_time_with_timezone
+
+logger = logging.Logger(name="bedrock_updater")
 
 
 class BedrockUpdaterConfig(BaseModel):
@@ -28,6 +32,9 @@ def update(config: BedrockUpdaterConfig) -> None:
     )
 
     for bedrock_server in bedrock_server_api.get_bedrock_servers():
+        logger.info(
+            f"Ping {bedrock_server.host}:{bedrock_server.port} ({bedrock_server.id})"
+        )
         try:
             ping_result = bedrock_ping_api.ping(
                 host=bedrock_server.host,
@@ -98,12 +105,24 @@ def main() -> None:
         action="store_true",
         default=os.environ.get("MCPING_BEDROCK_UPDATER_LOOP") == "1",
     )
+    parser.add_argument(
+        "--log_level",
+        type=int,
+        default=os.environ.get("MCPING_BEDROCK_UPDATER_LOG_LEVEL", logging.INFO),
+    )
     args = parser.parse_args()
 
+    log_level: int = args.log_level
     database_url: str = args.database_url
     interval: float = args.interval
     timeout: float = args.timeout
     loop: bool = args.loop
+
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s %(levelname)s: %(message)s",
+    )
+    setup_logging_format_time_with_timezone()
 
     config = BedrockUpdaterConfig(
         database_url=database_url,

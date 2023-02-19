@@ -1,3 +1,4 @@
+import logging
 import os
 
 import uvicorn
@@ -12,6 +13,9 @@ from ..lib.repository.bedrock_server_repository import (
     BedrockServer,
     BedrockServerRepositoryImpl,
 )
+from ..lib.util.logging_utility import setup_logging_format_time_with_timezone
+
+logger = logging.Logger(name="web_api")
 
 
 class WebApiConfig(BaseModel):
@@ -99,12 +103,24 @@ def main() -> None:
         action="store_true",
         default=os.environ.get("MCPING_WEB_API_RELOAD") == "1",
     )
+    parser.add_argument(
+        "--log_level",
+        type=int,
+        default=os.environ.get("MCPING_WEB_API_LOG_LEVEL", logging.INFO),
+    )
     args = parser.parse_args()
 
+    log_level: int = args.log_level
     database_url: str = args.database_url
     host: str = args.host
     port: int = args.port
     reload: bool = args.reload
+
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s %(levelname)s: %(message)s",
+    )
+    setup_logging_format_time_with_timezone()
 
     config = WebApiConfig(
         host=host,
