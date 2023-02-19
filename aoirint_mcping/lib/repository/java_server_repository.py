@@ -26,6 +26,13 @@ class JavaServerRepository(ABC):
     ) -> JavaServer:
         ...
 
+    @abstractmethod
+    def delete_java_server(
+        self,
+        id: str,
+    ) -> str:
+        ...
+
 
 class JavaServerRepositoryImpl(JavaServerRepository):
     def __init__(self, database_url: str):
@@ -94,3 +101,23 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                     host=host,
                     port=port,
                 )
+
+    def delete_java_server(
+        self,
+        id: str,
+    ) -> str:
+        with self.engine.connect() as conn:
+            with conn.begin():
+                conn.execute(
+                    sql_text(
+                        """
+                            DELETE FROM "java_servers"
+                            WHERE id=:id
+                        """,
+                    ),
+                    parameters=dict(
+                        id=id,
+                    ),
+                )
+
+                return id

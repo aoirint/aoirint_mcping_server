@@ -26,6 +26,13 @@ class BedrockServerRepository(ABC):
     ) -> BedrockServer:
         ...
 
+    @abstractmethod
+    def delete_bedrock_server(
+        self,
+        id: str,
+    ) -> str:
+        ...
+
 
 class BedrockServerRepositoryImpl(BedrockServerRepository):
     def __init__(self, database_url: str):
@@ -94,3 +101,23 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                     host=host,
                     port=port,
                 )
+
+    def delete_bedrock_server(
+        self,
+        id: str,
+    ) -> str:
+        with self.engine.connect() as conn:
+            with conn.begin():
+                conn.execute(
+                    sql_text(
+                        """
+                            DELETE FROM "bedrock_servers"
+                            WHERE id=:id
+                        """,
+                    ),
+                    parameters=dict(
+                        id=id,
+                    ),
+                )
+
+                return id

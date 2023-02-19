@@ -86,6 +86,26 @@ def create_asgi_app(config: WebApiConfig):
             port=port,
         )
 
+    class DeleteBedrockServerResponse(BaseModel):
+        id: str
+
+    @app.post(
+        "/bedrock_server/delete",
+        response_model=DeleteBedrockServerResponse,
+        dependencies=[Depends(verify_write_api_key)],
+    )
+    async def bedrock_server_delete(
+        id: str,
+    ):
+        bedrock_server_api = BedrockServerRepositoryImpl(
+            database_url=config.database_url
+        )
+        return DeleteBedrockServerResponse(
+            id=bedrock_server_api.delete_bedrock_server(
+                id=id,
+            ),
+        )
+
     @app.post(
         "/bedrock_ping_record/latest",
         response_model=list[BedrockPingRecord],
@@ -133,6 +153,24 @@ def create_asgi_app(config: WebApiConfig):
             name=name,
             host=host,
             port=port,
+        )
+
+    class DeleteJavaServerResponse(BaseModel):
+        id: str
+
+    @app.post(
+        "/java_server/delete",
+        response_model=DeleteJavaServerResponse,
+        dependencies=[Depends(verify_write_api_key)],
+    )
+    async def java_server_delete(
+        id: str,
+    ):
+        java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
+        return DeleteJavaServerResponse(
+            id=java_server_api.delete_java_server(
+                id=id,
+            )
         )
 
     @app.post(
