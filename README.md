@@ -1,11 +1,17 @@
-# aoirint_mcping
+# aoirint_mcping_server
 
-## TODO
+## Feature
 
-- [x] Bedrock server ping
-- [x] Prohibit duplicated server registration
-- [x] Java server ping
-- [x] Restrict write API access
+- Monitoring Bedrock server status
+- Monitoring Java server status
+- Persistence by PostgreSQL database
+- Web API with Read/Write API key authentication
+
+## Docker repository
+
+- [aoirint/aoirint_mcping_server_web_api](https://hub.docker.com/r/aoirint/aoirint_mcping_server_web_api)
+- [aoirint/aoirint_mcping_server_java_updater](https://hub.docker.com/r/aoirint/aoirint_mcping_server_java_updater)
+- [aoirint/aoirint_mcping_server_bedrock_updater](https://hub.docker.com/r/aoirint/aoirint_mcping_server_bedrock_updater)
 
 ## Database migration
 
