@@ -170,8 +170,6 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         uses: softprops/action-gh-release@v1
         with:
-          draft: ${{ github.event.release.draft }}
-          prerelease: ${{ github.event.release.prerelease }}
           tag_name: ${{ github.ref }}
           target_commitish: ${{ github.sha }}
           files: artifact/*.tar.gz
@@ -180,8 +178,6 @@ jobs:
         if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
         uses: softprops/action-gh-release@v1
         with:
-          draft: ${{ github.event.release.draft }}
-          prerelease: ${{ github.event.release.prerelease }}
           tag_name: ${{ github.ref }}
           target_commitish: ${{ github.sha }}
           files: artifact/*.zip
