@@ -5,7 +5,7 @@
 - [x] Bedrock server ping
 - [x] Prohibit duplicated server registration
 - [x] Java server ping
-- [ ] Restrict write API access
+- [x] Restrict write API access
 
 ## Database migration
 
