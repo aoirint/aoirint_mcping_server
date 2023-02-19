@@ -52,6 +52,7 @@ FROM ${BASE_RUNTIME_IMAGE} AS base-env
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
+ENV PATH=/usr/local/bin:${PATH}
 
 COPY --from=python-env /opt/python/ /usr/local/
 
@@ -77,7 +78,7 @@ FROM base-env AS bedrock-updater-runtime-env
 
 WORKDIR /work
 ADD ./requirements-bedrock-updater.txt /work/
-RUN gosu user pip install --no-cache-dir -r /work/requirements-bedrock-updater.txt
+RUN gosu user pip3 install --no-cache-dir -r /work/requirements-bedrock-updater.txt
 
 ADD ./aoirint_mcping /work/aoirint_mcping
 ADD ./aoirint_mcping_bedrock_updater.py /work/
@@ -91,7 +92,7 @@ FROM base-env AS java-updater-runtime-env
 
 WORKDIR /work
 ADD ./requirements-java-updater.txt /work/
-RUN gosu user pip install --no-cache-dir -r /work/requirements-java-updater.txt
+RUN gosu user pip3 install --no-cache-dir -r /work/requirements-java-updater.txt
 
 ADD ./aoirint_mcping /work/aoirint_mcping
 ADD ./aoirint_mcping_java_updater.py /work/
@@ -105,7 +106,7 @@ FROM base-env AS web-api-runtime-env
 
 WORKDIR /work
 ADD ./requirements-web-api.txt /work/
-RUN gosu user pip install --no-cache-dir -r /work/requirements-web-api.txt
+RUN gosu user pip3 install --no-cache-dir -r /work/requirements-web-api.txt
 
 ADD ./aoirint_mcping /work/aoirint_mcping
 ADD ./aoirint_mcping_web_api.py /work/
