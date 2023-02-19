@@ -29,6 +29,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "${POSTGRES_DATA_ROOT}:/var/lib/postgresql/data"
 
   migrate:
     image: migrate/migrate:v4.15.2
