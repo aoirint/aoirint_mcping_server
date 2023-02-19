@@ -145,13 +145,13 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         run: |
           cd artifact
-          tar cfzv "../${{ steps.asset-basename.outputs.ASSET_BASENAME }}.tar.gz" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          tar cfzv "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.tar.gz" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Compress zip
         if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
         run: |
           cd artifact
-          zip -rv "../${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          zip -rv "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Upload tar.gz to Release
         if: startsWith(matrix.os, 'ubuntu-')
