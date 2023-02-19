@@ -141,13 +141,13 @@ jobs:
         if: endsWith(matrix.asset_name, '.tgz')
         run: |
           cd artifact
-          tar czf "../${{ matrix.asset_name }}" .
+          tar czfv "../${{ matrix.asset_name }}" .
 
       - name: Compress zip
         if: endsWith(matrix.asset_name, '.zip')
         run: |
           cd artifact
-          zip -r "../${{ matrix.asset_name }}" .
+          zip -rv "../${{ matrix.asset_name }}" .
 
       - name: Upload Binary to Release
         uses: svenstaro/upload-release-action@v2
