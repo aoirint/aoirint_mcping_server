@@ -51,6 +51,7 @@ FROM ${BASE_RUNTIME_IMAGE} AS base-env
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
+ENV PATH=/usr/local/bin:${PATH}
 
 COPY --from=python-env /opt/python/ /usr/local/
 
