@@ -2,10 +2,23 @@
 
 ## Feature
 
-- Monitoring Bedrock server status
-- Monitoring Java server status
+- Monitoring status of multiple Minecraft Bedrock/Java servers
 - Persistence by PostgreSQL database
 - Web API with Read/Write API key authentication
+
+## Supported Minecraft server versions
+
+- Bedrock 1.19.x
+- Java 1.19.x
+
+## Deploy
+
+### Docker Compose
+
+Copy these files to a new directory and configure.
+
+- `docker-compose.yaml`
+- `template.env` -> `.env`
 
 ## Docker repository
 
