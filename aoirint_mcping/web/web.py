@@ -4,11 +4,11 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from ..api.bedrock_ping_record_api import (
+from ..repository.bedrock_ping_record_repository import (
     BedrockPingRecord,
-    BedrockPingRecordApiModelImpl,
+    BedrockPingRecordRepositoryImpl,
 )
-from ..api.bedrock_server_api import BedrockServer, BedrockServerApiModelImpl
+from ..repository.bedrock_server_repository import BedrockServer, BedrockServerRepositoryImpl
 
 
 class WebConfig(BaseModel):
@@ -23,7 +23,7 @@ def create_asgi_app(config: WebConfig):
 
     @app.post("/bedrock_server/list", response_model=list[BedrockServer])
     async def bedrock_server_list():
-        bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
+        bedrock_server_api = BedrockServerRepositoryImpl(database_url=config.database_url)
         return bedrock_server_api.get_bedrock_servers()
 
     @app.post("/bedrock_server/create", response_model=BedrockServer)
@@ -32,7 +32,7 @@ def create_asgi_app(config: WebConfig):
         host: str,
         port: int,
     ):
-        bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
+        bedrock_server_api = BedrockServerRepositoryImpl(database_url=config.database_url)
         return bedrock_server_api.create_bedrock_server(
             name=name,
             host=host,
@@ -47,7 +47,7 @@ def create_asgi_app(config: WebConfig):
         if count > 20:
             raise Exception('"count" must be less than or equal to 100')
 
-        bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
+        bedrock_ping_record_api = BedrockPingRecordRepositoryImpl(
             database_url=config.database_url
         )
 

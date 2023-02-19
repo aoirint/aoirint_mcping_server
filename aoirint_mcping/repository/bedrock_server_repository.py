@@ -12,7 +12,7 @@ class BedrockServer(BaseModel):
     port: int
 
 
-class BedrockServerApiModel(ABC):
+class BedrockServerRepository(ABC):
     @abstractmethod
     def get_bedrock_servers(self) -> list[BedrockServer]:
         ...
@@ -27,7 +27,7 @@ class BedrockServerApiModel(ABC):
         ...
 
 
-class BedrockServerApiModelImpl(BedrockServerApiModel):
+class BedrockServerRepositoryImpl(BedrockServerRepository):
     def __init__(self, database_url: str):
         self.engine = create_engine(url=database_url)
 

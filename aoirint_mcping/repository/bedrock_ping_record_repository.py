@@ -21,7 +21,7 @@ class BedrockPingRecord(BaseModel):
     gamemode: str | None
 
 
-class BedrockPingRecordApiModel(ABC):
+class BedrockPingRecordRepository(ABC):
     @abstractmethod
     def get_latest_bedrock_ping_record(
         self,
@@ -49,7 +49,7 @@ class BedrockPingRecordApiModel(ABC):
         ...
 
 
-class BedrockPingRecordApiModelImpl(BedrockPingRecordApiModel):
+class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
     def __init__(self, database_url: str):
         self.engine = create_engine(url=database_url)
 

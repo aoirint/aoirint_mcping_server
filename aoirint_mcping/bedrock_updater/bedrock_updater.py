@@ -4,9 +4,9 @@ import time
 import schedule
 from pydantic import BaseModel
 
-from ..api.bedrock_ping_api import BedrockPingApiModelImpl, BedrockPingTimeoutError
-from ..api.bedrock_ping_record_api import BedrockPingRecordApiModelImpl
-from ..api.bedrock_server_api import BedrockServerApiModelImpl
+from ..repository.bedrock_ping_repository import BedrockPingRepositoryImpl, BedrockPingTimeoutError
+from ..repository.bedrock_ping_record_repository import BedrockPingRecordRepositoryImpl
+from ..repository.bedrock_server_repository import BedrockServerRepositoryImpl
 
 
 class BedrockUpdaterConfig(BaseModel):
@@ -16,9 +16,9 @@ class BedrockUpdaterConfig(BaseModel):
 
 
 def update(config: BedrockUpdaterConfig) -> None:
-    bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
-    bedrock_ping_api = BedrockPingApiModelImpl()
-    bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
+    bedrock_server_api = BedrockServerRepositoryImpl(database_url=config.database_url)
+    bedrock_ping_api = BedrockPingRepositoryImpl()
+    bedrock_ping_record_api = BedrockPingRecordRepositoryImpl(
         database_url=config.database_url
     )
 

@@ -21,13 +21,13 @@ class BedrockPingResult(BaseModel):
     gamemode: str
 
 
-class BedrockPingApiModel(ABC):
+class BedrockPingRepository(ABC):
     @abstractmethod
     def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult | None:
         ...
 
 
-class BedrockPingApiModelImpl(BedrockPingApiModel):
+class BedrockPingRepositoryImpl(BedrockPingRepository):
     def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult | None:
         try:
             server = BedrockServer.lookup(address=f"{host}:{port}", timeout=timeout)
