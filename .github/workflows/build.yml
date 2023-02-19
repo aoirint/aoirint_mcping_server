@@ -96,8 +96,9 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: "${{ env.PYTHON_VERSION }}"
           cache: 'pip'
+          cache-dependency-path: '**/requirements-dev.txt'
 
       - name: Install Dependencies
         run: |
