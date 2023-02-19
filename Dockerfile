@@ -9,6 +9,8 @@ ARG PYENV_VERSION=v2.3.13
 ARG PYTHON_VERSION=3.10.10
 
 RUN <<EOF
+    set -eu
+
     apt-get update
 
     apt-get install -y \
@@ -33,13 +35,15 @@ RUN <<EOF
 EOF
 
 RUN <<EOF
-  git clone https://github.com/pyenv/pyenv.git /opt/pyenv
-  git checkout "${PYENV_VERSION}"
+    set -eu
 
-  PREFIX=/opt/python-build /opt/pyenv/plugins/python-build/install.sh
-  /opt/python-build/bin/python-build -v "${PYTHON_VERSION}" /opt/python
+    git clone https://github.com/pyenv/pyenv.git /opt/pyenv
+    git checkout "${PYENV_VERSION}"
 
-  rm -rf /opt/python-build /opt/pyenv
+    PREFIX=/opt/python-build /opt/pyenv/plugins/python-build/install.sh
+    /opt/python-build/bin/python-build -v "${PYTHON_VERSION}" /opt/python
+
+    rm -rf /opt/python-build /opt/pyenv
 EOF
 
 
@@ -51,6 +55,8 @@ ENV PYTHONUNBUFFERED=1
 COPY --from=python-env /opt/python/ /usr/local/
 
 RUN <<EOF
+    set -eu
+
     apt-get update
     apt-get install -y \
         gosu
@@ -59,6 +65,8 @@ RUN <<EOF
 EOF
 
 RUN <<EOF
+    set -eu
+
     groupadd -o -g 1000 user
     useradd -o -m -u 1000 -g user user
 EOF
