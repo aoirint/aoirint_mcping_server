@@ -61,6 +61,7 @@ RUN <<EOF
 
     apt-get update
     apt-get install -y \
+        openssl \
         gosu
     apt-get clean
     rm -rf /var/apt/lists/*
