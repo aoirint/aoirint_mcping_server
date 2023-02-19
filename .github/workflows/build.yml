@@ -77,15 +77,15 @@ jobs:
         include:
           -
             os: 'ubuntu-20.04'
-            asset_name: aoirint_mcping_server-linux-amd64.tgz
+            asset_name_prefix: aoirint_mcping_server-linux-amd64
             sed: 'sed'
           -
             os: 'windows-2019'
-            asset_name: aoirint_mcping_server-windows-amd64.zip
+            asset_name_prefix: aoirint_mcping_server-windows-amd64
             sed: 'sed'
           -
             os: 'macos-11'
-            asset_name: aoirint_mcping_server-macos-amd64.zip
+            asset_name_prefix: aoirint_mcping_server-macos-amd64
             sed: 'gsed'
 
     runs-on: ${{ matrix.os }}
@@ -119,39 +119,52 @@ jobs:
           pyinstaller --name "aoirint_mcping_server_bedrock_updater" --onefile "aoirint_mcping_server_bedrock_updater.py"
           pyinstaller --name "aoirint_mcping_server_java_updater" --onefile "aoirint_mcping_server_java_updater.py"
 
-      - name: Create artifact directory for Linux / macOS
-        if: startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') 
-        run: |
-          mkdir artifact
+      - name: Set asset-basename
+        id: asset-basename
+        run: echo "ASSET_BASENAME=${{ matrix.asset_name_prefix }}-${{ env.VERSION }}" >> $GITHUB_OUTPUT
 
-          cp dist/aoirint_mcping_server_web_api artifact/
-          cp dist/aoirint_mcping_server_bedrock_updater artifact/
-          cp dist/aoirint_mcping_server_java_updater artifact/
+      - name: Create artifact directory for Linux / macOS
+        if: startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-')
+        run: |
+          mkdir -p "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}"
+
+          cp dist/aoirint_mcping_server_web_api "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          cp dist/aoirint_mcping_server_bedrock_updater "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          cp dist/aoirint_mcping_server_java_updater "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Create artifact directory for Windows
         if: startsWith(matrix.os, 'windows-')
         run: |
-          mkdir artifact
+          mkdir -p "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}"
 
-          cp dist/aoirint_mcping_server_web_api.exe artifact/
-          cp dist/aoirint_mcping_server_bedrock_updater.exe artifact/
-          cp dist/aoirint_mcping_server_java_updater.exe artifact/
+          cp dist/aoirint_mcping_server_web_api.exe "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          cp dist/aoirint_mcping_server_bedrock_updater.exe "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          cp dist/aoirint_mcping_server_java_updater.exe "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
-      - name: Compress tgz
-        if: endsWith(matrix.asset_name, '.tgz')
+      - name: Compress tar.gz
+        if: startsWith(matrix.os, 'ubuntu-')
         run: |
           cd artifact
-          tar czfv "../${{ matrix.asset_name }}" .
+          tar cfzv "../${{ steps.asset-basename.outputs.ASSET_BASENAME }}.tar.gz" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Compress zip
-        if: endsWith(matrix.asset_name, '.zip')
+        if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
         run: |
           cd artifact
-          zip -rv "../${{ matrix.asset_name }}" .
+          zip -rv "../${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
-      - name: Upload Binary to Release
+      - name: Upload tar.gz to Release
+        if: startsWith(matrix.os, 'ubuntu-')
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ matrix.asset_name }}
+          files: artifact/*.tar.gz
+          tag_name: ${{ github.ref }}
+          target_commitish: ${{ github.sha }}
+
+      - name: Upload zip to Release
+        if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifact/*.zip
           tag_name: ${{ github.ref }}
           target_commitish: ${{ github.sha }}
