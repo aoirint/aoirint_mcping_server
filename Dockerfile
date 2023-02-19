@@ -52,9 +52,9 @@ FROM ${BASE_RUNTIME_IMAGE} AS base-env
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
-ENV PATH=/usr/local/bin:${PATH}
+ENV PATH=/home/user/.local/bin:/opt/python/bin:${PATH}
 
-COPY --from=python-env /opt/python/ /usr/local/
+COPY --from=python-env /opt/python/ /opt/python/
 
 RUN <<EOF
     set -eu
