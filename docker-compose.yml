@@ -1,6 +1,6 @@
 services:
   web-api:
-    # image: aoirint/aoirint_mcping_web_api:latest
+    # image: aoirint/aoirint_mcping_server_web_api:latest
     build:
       context: .
       target: web-api-runtime-env
@@ -15,7 +15,7 @@ services:
       - postgres
 
   bedrock-updater:
-    # image: aoirint/aoirint_mcping_bedrock_updater:latest
+    # image: aoirint/aoirint_mcping_server_bedrock_updater:latest
     build:
       context: .
       target: bedrock-updater-runtime-env
@@ -27,7 +27,7 @@ services:
       - postgres
 
   java-updater:
-    # image: aoirint/aoirint_mcping_java_updater:latest
+    # image: aoirint/aoirint_mcping_server_java_updater:latest
     build:
       context: .
       target: java-updater-runtime-env
