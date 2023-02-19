@@ -104,19 +104,23 @@ jobs:
           cache-dependency-path: '**/requirements-dev.txt'
 
       - name: Install Dependencies
+        shell: bash
         run: |
           pip3 install -r requirements-dev.txt
 
       - name: Install gsed for macOS
         if: startsWith(matrix.os, 'macos-')
+        shell: bash
         run: |
           brew install gnu-sed
 
       - name: Replace Version
+        shell: bash
         run: |
           ${{ matrix.sed }} -i 's/__VERSION__ = "0.0.0"/__VERSION__ = "${{ env.VERSION }}"/' aoirint_mcping_server/__init__.py
 
       - name: Build Binary
+        shell: bash
         run: |
           pyinstaller --name "aoirint_mcping_server_web_api" --onefile "aoirint_mcping_server_web_api.py"
           pyinstaller --name "aoirint_mcping_server_bedrock_updater" --onefile "aoirint_mcping_server_bedrock_updater.py"
@@ -124,10 +128,12 @@ jobs:
 
       - name: Set asset-basename
         id: asset-basename
+        shell: bash
         run: echo "ASSET_BASENAME=${{ matrix.asset_name_prefix }}-${{ env.VERSION }}" >> $GITHUB_OUTPUT
 
       - name: Create artifact directory for Linux / macOS
         if: startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-')
+        shell: bash
         run: |
           mkdir -p "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}"
 
@@ -137,6 +143,7 @@ jobs:
 
       - name: Create artifact directory for Windows
         if: startsWith(matrix.os, 'windows-')
+        shell: bash
         run: |
           mkdir -p "artifact/${{ steps.asset-basename.outputs.ASSET_BASENAME }}"
 
@@ -146,12 +153,14 @@ jobs:
 
       - name: Compress tar.gz
         if: startsWith(matrix.os, 'ubuntu-')
+        shell: bash
         run: |
           cd artifact
           tar cfzv "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.tar.gz" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Compress zip
         if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
+        shell: bash
         run: |
           cd artifact
           zip -rv "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
