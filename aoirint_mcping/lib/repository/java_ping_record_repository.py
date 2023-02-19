@@ -78,14 +78,12 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                             "timeout",
                             "is_timeout",
                             "version_protocol",
-                            "version_brand",
-                            "version_version",
+                            "version_name",
                             "latency",
                             "players_online",
                             "players_max",
-                            "motd",
-                            "map",
-                            "gamemode"
+                            "description",
+                            "favicon"
                         FROM "java_ping_records"
                         WHERE
                             "java_server_id" = :java_server_id
@@ -107,14 +105,12 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         timeout=row[2],
                         is_timeout=row[3],
                         version_protocol=row[4],
-                        version_brand=row[5],
-                        version_version=row[6],
-                        latency=row[7],
-                        players_online=row[8],
-                        players_max=row[9],
-                        motd=row[10],
-                        map=row[11],
-                        gamemode=row[12],
+                        version_name=row[5],
+                        latency=row[6],
+                        players_online=row[7],
+                        players_max=row[8],
+                        description=row[9],
+                        favicon=row[10],
                     ),
                     rows,
                 ),
