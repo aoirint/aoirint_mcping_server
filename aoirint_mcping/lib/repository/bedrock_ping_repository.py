@@ -9,6 +9,10 @@ class BedrockPingTimeoutError(Exception):
     pass
 
 
+class BedrockPingRefusedError(Exception):
+    pass
+
+
 class BedrockPingResult(BaseModel):
     version_protocol: int
     version_brand: str
@@ -46,3 +50,5 @@ class BedrockPingRepositoryImpl(BedrockPingRepository):
             )
         except asyncio.TimeoutError:
             raise BedrockPingTimeoutError
+        except ConnectionRefusedError:
+            raise BedrockPingRefusedError

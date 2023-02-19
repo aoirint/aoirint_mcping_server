@@ -9,6 +9,10 @@ class JavaPingTimeoutError(Exception):
     pass
 
 
+class JavaPingRefusedError(Exception):
+    pass
+
+
 class JavaPingResultPlayer(BaseModel):
     id: str
     name: str
@@ -62,3 +66,5 @@ class JavaPingRepositoryImpl(JavaPingRepository):
             )
         except asyncio.TimeoutError:
             raise JavaPingTimeoutError
+        except ConnectionRefusedError:
+            raise JavaPingRefusedError

@@ -9,6 +9,7 @@ from ..lib.repository.bedrock_ping_record_repository import (
     BedrockPingRecordRepositoryImpl,
 )
 from ..lib.repository.bedrock_ping_repository import (
+    BedrockPingRefusedError,
     BedrockPingRepositoryImpl,
     BedrockPingTimeoutError,
 )
@@ -45,6 +46,7 @@ def update(config: BedrockUpdaterConfig) -> None:
                 bedrock_server_id=bedrock_server.id,
                 timeout=config.timeout,
                 is_timeout=False,
+                is_refused=False,
                 version_protocol=ping_result.version_protocol,
                 version_brand=ping_result.version_brand,
                 version_version=ping_result.version_version,
@@ -60,6 +62,23 @@ def update(config: BedrockUpdaterConfig) -> None:
                 bedrock_server_id=bedrock_server.id,
                 timeout=config.timeout,
                 is_timeout=True,
+                is_refused=False,
+                version_protocol=None,
+                version_brand=None,
+                version_version=None,
+                latency=None,
+                players_online=None,
+                players_max=None,
+                motd=None,
+                map=None,
+                gamemode=None,
+            )
+        except BedrockPingRefusedError:
+            bedrock_ping_record_api.create_bedrock_ping_record(
+                bedrock_server_id=bedrock_server.id,
+                timeout=config.timeout,
+                is_timeout=False,
+                is_refused=True,
                 version_protocol=None,
                 version_brand=None,
                 version_version=None,

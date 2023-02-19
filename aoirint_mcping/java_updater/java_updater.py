@@ -10,6 +10,7 @@ from ..lib.repository.java_ping_record_repository import (
     JavaPingRecordRepositoryImpl,
 )
 from ..lib.repository.java_ping_repository import (
+    JavaPingRefusedError,
     JavaPingRepositoryImpl,
     JavaPingTimeoutError,
 )
@@ -44,6 +45,7 @@ def update(config: JavaUpdaterConfig) -> None:
                 java_server_id=java_server.id,
                 timeout=config.timeout,
                 is_timeout=False,
+                is_refused=False,
                 version_protocol=ping_result.version_protocol,
                 version_name=ping_result.version_name,
                 latency=ping_result.latency,
@@ -66,6 +68,22 @@ def update(config: JavaUpdaterConfig) -> None:
                 java_server_id=java_server.id,
                 timeout=config.timeout,
                 is_timeout=True,
+                is_refused=False,
+                version_protocol=None,
+                version_name=None,
+                latency=None,
+                players_online=None,
+                players_max=None,
+                players_sample=None,
+                description=None,
+                favicon=None,
+            )
+        except JavaPingRefusedError:
+            java_ping_record_api.create_java_ping_record(
+                java_server_id=java_server.id,
+                timeout=config.timeout,
+                is_timeout=False,
+                is_refused=True,
                 version_protocol=None,
                 version_name=None,
                 latency=None,
