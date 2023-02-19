@@ -13,7 +13,10 @@ from ..lib.repository.bedrock_server_repository import (
     BedrockServer,
     BedrockServerRepositoryImpl,
 )
-from ..lib.util.logging_utility import setup_logging_format_time_with_timezone
+from ..lib.util.logging_utility import (
+    setup_logger,
+    setup_logging_format_time_with_timezone,
+)
 
 logger = logging.Logger(name="web_api")
 
@@ -108,9 +111,15 @@ def main() -> None:
         type=int,
         default=os.environ.get("MCPING_WEB_API_LOG_LEVEL", logging.INFO),
     )
+    parser.add_argument(
+        "--log_file",
+        type=str,
+        default=os.environ.get("MCPING_WEB_API_LOG_FILE"),
+    )
     args = parser.parse_args()
 
     log_level: int = args.log_level
+    log_file: str | None = args.log_file
     database_url: str = args.database_url
     host: str = args.host
     port: int = args.port
@@ -121,6 +130,7 @@ def main() -> None:
         format="%(asctime)s %(levelname)s: %(message)s",
     )
     setup_logging_format_time_with_timezone()
+    setup_logger(logger=logger, log_level=log_level, log_file=log_file)
 
     config = WebApiConfig(
         host=host,
