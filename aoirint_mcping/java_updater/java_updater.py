@@ -14,10 +14,7 @@ from ..lib.repository.java_ping_repository import (
     JavaPingTimeoutError,
 )
 from ..lib.repository.java_server_repository import JavaServerRepositoryImpl
-from ..lib.util.logging_utility import (
-    setup_logger,
-    setup_logging_format_time_with_timezone,
-)
+from ..lib.util.logging_utility import setup_logger
 
 logger = logging.Logger(name="java_updater")
 
@@ -134,9 +131,7 @@ def main() -> None:
 
     logging.basicConfig(
         level=log_level,
-        format="%(asctime)s %(levelname)s: %(message)s",
     )
-    setup_logging_format_time_with_timezone()
     setup_logger(logger=logger, log_level=log_level, log_file=log_file)
 
     config = JavaUpdaterConfig(

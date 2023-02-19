@@ -13,10 +13,7 @@ from ..lib.repository.bedrock_server_repository import (
     BedrockServer,
     BedrockServerRepositoryImpl,
 )
-from ..lib.util.logging_utility import (
-    setup_logger,
-    setup_logging_format_time_with_timezone,
-)
+from ..lib.util.logging_utility import setup_logger
 
 logger = logging.Logger(name="web_api")
 
@@ -127,9 +124,7 @@ def main() -> None:
 
     logging.basicConfig(
         level=log_level,
-        format="%(asctime)s %(levelname)s: %(message)s",
     )
-    setup_logging_format_time_with_timezone()
     setup_logger(logger=logger, log_level=log_level, log_file=log_file)
 
     config = WebApiConfig(
