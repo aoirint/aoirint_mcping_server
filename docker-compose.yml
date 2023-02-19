@@ -24,6 +24,18 @@ services:
     depends_on:
       - postgres
 
+  java-updater:
+    # image: aoirint/aoirint_mcping_java_updater:latest
+    build:
+      context: .
+      target: java-updater-runtime-env
+    restart: always
+    environment:
+      MCPING_JAVA_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      MCPING_JAVA_UPDATER_INTERVAL: ${MCPING_JAVA_UPDATER_INTERVAL}
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:15
     restart: always
