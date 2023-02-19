@@ -22,7 +22,7 @@ class JavaPingResult(BaseModel):
     players_max: int
     players_sample: list[JavaPingResultPlayer]
     description: str
-    favicon: str | None # Data URL
+    favicon: str | None  # Data URL
 
 
 class JavaPingRepository(ABC):
@@ -38,7 +38,9 @@ class JavaPingRepositoryImpl(JavaPingRepository):
             response = server.status()
 
             # sample is None when no player logged in
-            players_sample = response.players.sample if response.players.sample is not None else []
+            players_sample = (
+                response.players.sample if response.players.sample is not None else []
+            )
 
             return JavaPingResult(
                 version_protocol=response.version.protocol,
