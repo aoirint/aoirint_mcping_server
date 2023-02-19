@@ -38,6 +38,7 @@ RUN <<EOF
     set -eu
 
     git clone https://github.com/pyenv/pyenv.git /opt/pyenv
+    cd /opt/pyenv
     git checkout "${PYENV_VERSION}"
 
     PREFIX=/opt/python-build /opt/pyenv/plugins/python-build/install.sh
