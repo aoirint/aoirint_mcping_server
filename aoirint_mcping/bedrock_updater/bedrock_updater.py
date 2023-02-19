@@ -4,8 +4,13 @@ import time
 import schedule
 from pydantic import BaseModel
 
-from ..lib.repository.bedrock_ping_repository import BedrockPingRepositoryImpl, BedrockPingTimeoutError
-from ..lib.repository.bedrock_ping_record_repository import BedrockPingRecordRepositoryImpl
+from ..lib.repository.bedrock_ping_record_repository import (
+    BedrockPingRecordRepositoryImpl,
+)
+from ..lib.repository.bedrock_ping_repository import (
+    BedrockPingRepositoryImpl,
+    BedrockPingTimeoutError,
+)
 from ..lib.repository.bedrock_server_repository import BedrockServerRepositoryImpl
 
 
