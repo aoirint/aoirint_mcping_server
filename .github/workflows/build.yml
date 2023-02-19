@@ -170,14 +170,14 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu-')
         uses: softprops/action-gh-release@v1
         with:
-          files: artifact/*.tar.gz
           tag_name: ${{ github.ref }}
           target_commitish: ${{ github.sha }}
+          files: artifact/*.tar.gz
 
       - name: Upload zip to Release
         if: startsWith(matrix.os, 'windows-') || startsWith(matrix.os, 'macos-')
         uses: softprops/action-gh-release@v1
         with:
-          files: artifact/*.zip
           tag_name: ${{ github.ref }}
           target_commitish: ${{ github.sha }}
+          files: artifact/*.zip
