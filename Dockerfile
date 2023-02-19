@@ -54,7 +54,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
 ENV PATH=/home/user/.local/bin:/opt/python/bin:${PATH}
 
-COPY --from=python-env /opt/python/ /opt/python/
+COPY --from=python-env /opt/python /opt/python
 
 RUN <<EOF
     set -eu
