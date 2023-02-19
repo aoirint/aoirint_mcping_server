@@ -36,6 +36,10 @@ uvicorn = {extras = ["standard"], version = "^0.20.0"}
 schedule = "^1.1.0"
 mcstatus = "^10.0.1"
 
+[tool.poetry.group.java-updater.dependencies]
+schedule = "^1.1.0"
+mcstatus = "^10.0.1"
+
 [tool.poetry.group.dev.dependencies]
 mypy = ">=0.900, <1.0"
 pysen = "^0.10.3"
