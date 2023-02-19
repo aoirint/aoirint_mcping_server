@@ -150,8 +150,8 @@ jobs:
           zip -rv "../${{ matrix.asset_name }}" .
 
       - name: Upload Binary to Release
-        uses: svenstaro/upload-release-action@v2
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ matrix.asset_name }}
-          tag: ${{ github.ref }}
+          files: ${{ matrix.asset_name }}
+          tag_name: ${{ github.ref }}
+          target_commitish: ${{ github.sha }}
