@@ -81,12 +81,12 @@ WORKDIR /work
 ADD ./requirements-bedrock-updater.txt /work/
 RUN gosu user pip3 install --no-cache-dir -r /work/requirements-bedrock-updater.txt
 
-ADD ./aoirint_mcping /work/aoirint_mcping
-ADD ./aoirint_mcping_bedrock_updater.py /work/
+ADD ./aoirint_mcping_server /work/aoirint_mcping_server
+ADD ./aoirint_mcping_server_bedrock_updater.py /work/
 
 ENV MCPING_BEDROCK_UPDATER_LOOP=1
 
-CMD [ "gosu", "user", "python3", "aoirint_mcping_bedrock_updater.py" ]
+CMD [ "gosu", "user", "python3", "aoirint_mcping_server_bedrock_updater.py" ]
 
 
 FROM base-env AS java-updater-runtime-env
@@ -95,12 +95,12 @@ WORKDIR /work
 ADD ./requirements-java-updater.txt /work/
 RUN gosu user pip3 install --no-cache-dir -r /work/requirements-java-updater.txt
 
-ADD ./aoirint_mcping /work/aoirint_mcping
-ADD ./aoirint_mcping_java_updater.py /work/
+ADD ./aoirint_mcping_server /work/aoirint_mcping_server
+ADD ./aoirint_mcping_server_java_updater.py /work/
 
 ENV MCPING_JAVA_UPDATER_LOOP=1
 
-CMD [ "gosu", "user", "python3", "aoirint_mcping_java_updater.py" ]
+CMD [ "gosu", "user", "python3", "aoirint_mcping_server_java_updater.py" ]
 
 
 FROM base-env AS web-api-runtime-env
@@ -109,9 +109,9 @@ WORKDIR /work
 ADD ./requirements-web-api.txt /work/
 RUN gosu user pip3 install --no-cache-dir -r /work/requirements-web-api.txt
 
-ADD ./aoirint_mcping /work/aoirint_mcping
-ADD ./aoirint_mcping_web_api.py /work/
+ADD ./aoirint_mcping_server /work/aoirint_mcping_server
+ADD ./aoirint_mcping_server_web_api.py /work/
 
 ENV MCPING_WEB_API_HOST=0.0.0.0
 
-CMD [ "gosu", "user", "python3", "aoirint_mcping_web_api.py" ]
+CMD [ "gosu", "user", "python3", "aoirint_mcping_server_web_api.py" ]
