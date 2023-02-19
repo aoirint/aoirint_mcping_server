@@ -9,13 +9,13 @@ from ..api.bedrock_ping_record_api import BedrockPingRecordApiModelImpl
 from ..api.bedrock_server_api import BedrockServerApiModelImpl
 
 
-class UpdaterConfig(BaseModel):
+class BedrockUpdaterConfig(BaseModel):
     database_url: str
     interval: float
     timeout: float
 
 
-def update(config: UpdaterConfig) -> None:
+def update(config: BedrockUpdaterConfig) -> None:
     bedrock_server_api = BedrockServerApiModelImpl(database_url=config.database_url)
     bedrock_ping_api = BedrockPingApiModelImpl()
     bedrock_ping_record_api = BedrockPingRecordApiModelImpl(
@@ -60,7 +60,7 @@ def update(config: UpdaterConfig) -> None:
             )
 
 
-def update_loop(config: UpdaterConfig) -> None:
+def update_loop(config: BedrockUpdaterConfig) -> None:
     schedule.every(interval=config.interval).seconds.do(update, config=config)
 
     while True:
@@ -75,23 +75,23 @@ def main() -> None:
     parser.add_argument(
         "--database_url",
         type=str,
-        default=os.environ.get("MCPING_UPDATER_DATABASE_URL"),
+        default=os.environ.get("MCPING_BEDROCK_UPDATER_DATABASE_URL"),
     )
     parser.add_argument(
         "--interval",
         type=float,
-        default=os.environ.get("MCPING_UPDATER_INTERVAL", "300"),
+        default=os.environ.get("MCPING_BEDROCK_UPDATER_INTERVAL", "300"),
     )
     parser.add_argument(
         "--timeout",
         type=float,
-        default=os.environ.get("MCPING_UPDATER_TIMEOUT", "3"),
+        default=os.environ.get("MCPING_BEDROCK_UPDATER_TIMEOUT", "3"),
     )
     parser.add_argument(
         "-l",
         "--loop",
         action="store_true",
-        default=os.environ.get("MCPING_UPDATER_LOOP") == "1",
+        default=os.environ.get("MCPING_BEDROCK_UPDATER_LOOP") == "1",
     )
     args = parser.parse_args()
 
@@ -100,7 +100,7 @@ def main() -> None:
     timeout: float = args.timeout
     loop: bool = args.loop
 
-    config = UpdaterConfig(
+    config = BedrockUpdaterConfig(
         database_url=database_url,
         interval=interval,
         timeout=timeout,

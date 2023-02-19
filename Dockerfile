@@ -15,18 +15,18 @@ RUN <<EOF
 EOF
 
 
-FROM base-env AS updater-runtime-env
+FROM base-env AS bedrock-updater-runtime-env
 
 WORKDIR /work
-ADD ./requirements-updater.txt /work/
-RUN gosu user pip3 install --no-cache-dir -r /work/requirements-updater.txt
+ADD ./requirements-bedrock-updater.txt /work/
+RUN gosu user pip3 install --no-cache-dir -r /work/requirements-bedrock-updater.txt
 
 ADD ./aoirint_mcping /work/aoirint_mcping
-ADD ./aoirint_mcping_updater.py /work/
+ADD ./aoirint_mcping_bedrock_updater.py /work/
 
-ENV MCPING_UPDATER_LOOP=1
+ENV MCPING_BEDROCK_UPDATER_LOOP=1
 
-CMD [ "gosu", "user", "python3", "aoirint_mcping_updater.py" ]
+CMD [ "gosu", "user", "python3", "aoirint_mcping_bedrock_updater.py" ]
 
 
 FROM base-env AS web-runtime-env

@@ -12,15 +12,15 @@ services:
     depends_on:
       - postgres
 
-  updater:
-    # image: aoirint/aoirint_mcping_updater:latest
+  bedrock-updater:
+    # image: aoirint/aoirint_mcping_bedrock_updater:latest
     build:
       context: .
-      target: updater-runtime-env
+      target: bedrock-updater-runtime-env
     restart: always
     environment:
-      MCPING_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
-      MCPING_UPDATER_INTERVAL: ${MCPING_UPDATER_INTERVAL}
+      MCPING_BEDROCK_UPDATER_DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      MCPING_BEDROCK_UPDATER_INTERVAL: ${MCPING_BEDROCK_UPDATER_INTERVAL}
     depends_on:
       - postgres
 

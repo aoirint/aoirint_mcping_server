@@ -32,7 +32,7 @@ psycopg2-binary = "^2.9.5"
 fastapi = "^0.92.0"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 
-[tool.poetry.group.updater.dependencies]
+[tool.poetry.group.bedrock-updater.dependencies]
 schedule = "^1.1.0"
 mcstatus = "^10.0.1"
 

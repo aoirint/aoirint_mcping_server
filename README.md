@@ -25,6 +25,6 @@ To dump `requirements*.txt`,
 
 ```shell
 poetry export --without-hashes --with web -o requirements-web.txt
-poetry export --without-hashes --with updater -o requirements-updater.txt
-poetry export --without-hashes --with dev,web,updater -o requirements-dev.txt
+poetry export --without-hashes --with bedrock-updater -o requirements-bedrock-updater.txt
+poetry export --without-hashes --with dev,web,bedrock-updater -o requirements-dev.txt
 ```
