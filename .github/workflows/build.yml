@@ -164,7 +164,7 @@ jobs:
         shell: bash
         run: |
           cd artifact
-          zip -rv "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
+          7z a "${{ steps.asset-basename.outputs.ASSET_BASENAME }}.zip" "${{ steps.asset-basename.outputs.ASSET_BASENAME }}/"
 
       - name: Upload tar.gz to Release
         if: startsWith(matrix.os, 'ubuntu-')
