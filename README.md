@@ -17,7 +17,7 @@
 
 Copy these files to a new directory and configure.
 
-- `docker-compose.yaml`
+- `docker-compose.yml`
 - `template.env` -> `.env`
 
 ## Docker repository
