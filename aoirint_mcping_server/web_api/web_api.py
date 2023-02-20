@@ -38,7 +38,7 @@ def create_asgi_app(config: WebApiConfig):
     app = FastAPI()
 
     async def verify_read_api_key(x_read_api_key: str | None = Header(None)):
-        # If config.read_api_key is not defined, everyone can write.
+        # If config.read_api_key is not defined, everyone can read.
         if config.read_api_key is None or config.read_api_key == "":
             return x_read_api_key
 
