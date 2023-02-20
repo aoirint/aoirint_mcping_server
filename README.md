@@ -23,7 +23,7 @@ Copy these files to a new directory and configure.
 Start Docker Compose services.
 
 ```shell
-docker compose up
+docker compose up -d
 ```
 
 Then, [apply database migrations](#database-migration).
