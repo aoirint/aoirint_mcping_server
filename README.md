@@ -20,6 +20,14 @@ Copy these files to a new directory and configure.
 - `docker-compose.yml`
 - `template.env` -> `.env`
 
+Start Docker Compose services.
+
+```shell
+docker compose up
+```
+
+Then, [apply database migrations](#database-migration).
+
 ## Docker repository
 
 - [aoirint/aoirint_mcping_server_web_api](https://hub.docker.com/r/aoirint/aoirint_mcping_server_web_api)
