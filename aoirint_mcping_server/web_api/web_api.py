@@ -246,7 +246,7 @@ def main() -> None:
     parser.add_argument(
         "--max_latest_count",
         type=int,
-        default=os.environ.get("MCPING_WEB_API_MAX_LATEST_COUNT", "20"),
+        default=os.environ.get("MCPING_WEB_API_MAX_LATEST_COUNT", "5"),
     )
     parser.add_argument(
         "--log_level",
