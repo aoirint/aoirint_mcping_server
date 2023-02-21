@@ -149,8 +149,8 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         ),
                         description=ping_record_row[9],
                         favicon=ping_record_row[10],
-                        created_at=str(ping_record_row[11]),
-                        updated_at=str(ping_record_row[12]),
+                        created_at=ping_record_row[11].isoformat(),
+                        updated_at=ping_record_row[12].isoformat(),
                     )
                 )
 
@@ -267,6 +267,6 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                     players_sample=ret_players_sample,
                     description=description,
                     favicon=favicon,
-                    created_at=str(ping_record_row[1]),
-                    updated_at=str(ping_record_row[2]),
+                    created_at=ping_record_row[1].isoformat(),
+                    updated_at=ping_record_row[2].isoformat(),
                 )

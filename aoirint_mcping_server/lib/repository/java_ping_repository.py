@@ -1,4 +1,3 @@
-import asyncio
 from abc import ABC, abstractmethod
 
 from mcstatus import JavaServer
