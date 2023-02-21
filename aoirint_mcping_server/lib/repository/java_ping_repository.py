@@ -64,7 +64,7 @@ class JavaPingRepositoryImpl(JavaPingRepository):
                 description=response.description,
                 favicon=response.favicon,
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise JavaPingTimeoutError
         except ConnectionRefusedError:
             raise JavaPingRefusedError
