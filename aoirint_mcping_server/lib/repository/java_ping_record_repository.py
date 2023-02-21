@@ -31,6 +31,8 @@ class JavaPingRecord(BaseModel):
     players_sample: list[JavaPingRecordPlayer] | None
     description: str | None
     favicon: str | None  # Data URL
+    created_at: str
+    updated_at: str
 
 
 class JavaPingRecordRepository(ABC):
@@ -85,7 +87,9 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                             "players_online",
                             "players_max",
                             "description",
-                            "favicon"
+                            "favicon",
+                            "created_at",
+                            "updated_at"
                         FROM "java_ping_records"
                         WHERE
                             "java_server_id" = :java_server_id
@@ -145,6 +149,8 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         ),
                         description=ping_record_row[9],
                         favicon=ping_record_row[10],
+                        created_at=str(ping_record_row[11]),
+                        updated_at=str(ping_record_row[12]),
                     )
                 )
 
@@ -194,7 +200,7 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                                 :players_max,
                                 :description,
                                 :favicon
-                            ) RETURNING id
+                            ) RETURNING "id", "created_at", "updated_at"
                         """,
                     ),
                     parameters=dict(
@@ -261,4 +267,6 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                     players_sample=ret_players_sample,
                     description=description,
                     favicon=favicon,
+                    created_at=str(ping_record_row[1]),
+                    updated_at=str(ping_record_row[2]),
                 )

@@ -20,6 +20,8 @@ class BedrockPingRecord(BaseModel):
     motd: str | None
     map: str | None
     gamemode: str | None
+    created_at: str
+    updated_at: str
 
 
 class BedrockPingRecordRepository(ABC):
@@ -78,7 +80,9 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                             "players_max",
                             "motd",
                             "map",
-                            "gamemode"
+                            "gamemode",
+                            "created_at",
+                            "updated_at"
                         FROM "bedrock_ping_records"
                         WHERE
                             "bedrock_server_id" = :bedrock_server_id
@@ -109,6 +113,8 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                         motd=row[11],
                         map=row[12],
                         gamemode=row[13],
+                        created_at=str(row[14]),
+                        updated_at=str(row[15]),
                     ),
                     rows,
                 ),
@@ -163,7 +169,7 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                                 :motd,
                                 :map,
                                 :gamemode
-                            ) RETURNING id
+                            ) RETURNING "id", "created_at", "updated_at"
                         """,
                     ),
                     parameters=dict(
@@ -198,4 +204,6 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                     motd=motd,
                     map=map,
                     gamemode=gamemode,
+                    created_at=str(row[1]),
+                    updated_at=str(row[2]),
                 )
