@@ -177,6 +177,25 @@ def create_asgi_app(config: WebApiConfig):
             port=port,
         )
 
+    @app.post(
+        "/java_server/update",
+        response_model=JavaServer,
+        dependencies=[Depends(verify_write_api_key)],
+    )
+    async def java_server_update(
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ):
+        java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
+        return java_server_api.update_java_server(
+            id=id,
+            name=name,
+            host=host,
+            port=port,
+        )
+
     class DeleteJavaServerResponse(BaseModel):
         id: str
 

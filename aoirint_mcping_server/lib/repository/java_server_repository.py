@@ -27,6 +27,16 @@ class JavaServerRepository(ABC):
         ...
 
     @abstractmethod
+    def update_java_server(
+        self,
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ) -> JavaServer:
+        ...
+
+    @abstractmethod
     def delete_java_server(
         self,
         id: str,
@@ -97,6 +107,46 @@ class JavaServerRepositoryImpl(JavaServerRepository):
 
                 return JavaServer(
                     id=str(row[0]),
+                    name=name,
+                    host=host,
+                    port=port,
+                )
+
+    def update_java_server(
+        self,
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ) -> JavaServer:
+        with self.engine.connect() as conn:
+            with conn.begin():
+                row = conn.execute(
+                    sql_text(
+                        """
+                            UPDATE "java_servers"
+                            SET
+                                "name" = :name,
+                                "host" = :host,
+                                "port" = :port
+                            WHERE
+                                "id" = :id
+                        """,
+                    ),
+                    parameters=dict(
+                        id=id,
+                        name=name,
+                        host=host,
+                        port=port,
+                    ),
+                ).fetchone()
+
+                updated_row_count = row[0]
+                if updated_row_count != 1:
+                    raise Exception(f"Failed to update java_server (id={id})")
+
+                return JavaServer(
+                    id=id,
                     name=name,
                     host=host,
                     port=port,
