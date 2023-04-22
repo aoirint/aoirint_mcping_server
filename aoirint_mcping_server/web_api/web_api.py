@@ -87,6 +87,27 @@ def create_asgi_app(config: WebApiConfig):
             port=port,
         )
 
+    @app.post(
+        "/bedrock_server/update",
+        response_model=BedrockServer,
+        dependencies=[Depends(verify_write_api_key)],
+    )
+    async def bedrock_server_update(
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ):
+        bedrock_server_api = BedrockServerRepositoryImpl(
+            database_url=config.database_url
+        )
+        return bedrock_server_api.update_bedrock_server(
+            id=id,
+            name=name,
+            host=host,
+            port=port,
+        )
+
     class DeleteBedrockServerResponse(BaseModel):
         id: str
 

@@ -27,6 +27,16 @@ class BedrockServerRepository(ABC):
         ...
 
     @abstractmethod
+    def update_bedrock_server(
+        self,
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ) -> BedrockServer:
+        ...
+
+    @abstractmethod
     def delete_bedrock_server(
         self,
         id: str,
@@ -97,6 +107,46 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
 
                 return BedrockServer(
                     id=str(row[0]),
+                    name=name,
+                    host=host,
+                    port=port,
+                )
+
+    def update_bedrock_server(
+        self,
+        id: str,
+        name: str,
+        host: str,
+        port: int,
+    ) -> BedrockServer:
+        with self.engine.connect() as conn:
+            with conn.begin():
+                row = conn.execute(
+                    sql_text(
+                        """
+                            UPDATE "bedrock_servers"
+                            SET
+                                "name" = :name,
+                                "host" = :host,
+                                "port" = :port
+                            WHERE
+                                "id" = :id
+                        """,
+                    ),
+                    parameters=dict(
+                        id=id,
+                        name=name,
+                        host=host,
+                        port=port,
+                    ),
+                ).fetchone()
+
+                updated_row_count = row[0]
+                if updated_row_count != 1:
+                    raise Exception(f"Failed to update bedrock_server (id={id})")
+
+                return BedrockServer(
+                    id=id,
                     name=name,
                     host=host,
                     port=port,
