@@ -55,6 +55,8 @@ jobs:
         uses: docker/build-push-action@v3
         env:
           IMAGE_NAME_AND_TAG: ${{ format('{0}_{1}:{2}', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix, env.IMAGE_TAG) }}
+          IMAGE_CACHE_FROM: ${{ format('type=registry,ref={0}_{1}:latest-buildcache,mode=max', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix) }}
+          IMAGE_CACHE_TO: ${{ env.IMAGE_TAG == 'latest' && format('type=registry,ref={0}_{1}:latest-buildcache,mode=max', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix) || '' }}
         with:
           context: .
           builder: ${{ steps.buildx.outputs.name }}
@@ -66,8 +68,8 @@ jobs:
             BASE_IMAGE=${{ matrix.base_image }}
             BASE_RUNTIME_IMAGE=${{ matrix.base_runtime_image }}
             PYTHON_VERSION=${{ env.PYTHON_VERSION }}
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache,mode=max
+          cache-from: ${{ env.IMAGE_CACHE_FROM }}
+          cache-to: ${{ env.IMAGE_CACHE_TO }}
 
   release-binary:
     if: github.event.release.tag_name != ''
