@@ -121,7 +121,7 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
     ) -> BedrockServer:
         with self.engine.connect() as conn:
             with conn.begin():
-                row = conn.execute(
+                rows = conn.execute(
                     sql_text(
                         """
                             UPDATE "bedrock_servers"
@@ -131,6 +131,7 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                                 "port" = :port
                             WHERE
                                 "id" = :id
+                            RETURNING "id"
                         """,
                     ),
                     parameters=dict(
@@ -139,10 +140,9 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                         host=host,
                         port=port,
                     ),
-                ).fetchone()
+                ).fetchall()
 
-                updated_row_count = row[0]
-                if updated_row_count != 1:
+                if len(rows) != 1:
                     raise Exception(f"Failed to update bedrock_server (id={id})")
 
                 return BedrockServer(
