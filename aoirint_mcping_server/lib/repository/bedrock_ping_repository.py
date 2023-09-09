@@ -20,8 +20,8 @@ class BedrockPingResult(BaseModel):
     players_online: int
     players_max: int
     motd: str
-    map: str
-    gamemode: str
+    map: str | None
+    gamemode: str | None
 
 
 class BedrockPingRepository(ABC):
