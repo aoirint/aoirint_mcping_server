@@ -3,7 +3,11 @@ import logging
 
 
 class Iso8601WithTimezoneFormatter(logging.Formatter):
-    def formatTime(self, record, datefmt=None) -> str:
+    def formatTime(
+        self,
+        record: logging.LogRecord,
+        datefmt: str | None = None,
+    ) -> str:
         return (
             datetime.datetime.fromtimestamp(record.created, datetime.timezone.utc)
             .astimezone()
@@ -15,7 +19,7 @@ def setup_logger(
     logger: logging.Logger,
     log_level: int,
     log_file: str | None,
-):
+) -> None:
     logger.setLevel(log_level)
 
     stream_handler = logging.StreamHandler()

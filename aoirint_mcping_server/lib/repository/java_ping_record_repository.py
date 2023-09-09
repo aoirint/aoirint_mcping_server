@@ -170,7 +170,7 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
         players_sample: list[CreateJavaPingRecordJavaPingRecordPlayer] | None,
         description: str | None,
         favicon: str | None,
-    ):
+    ) -> JavaPingRecord:
         with self.engine.connect() as conn:
             with conn.begin():
                 ping_record_row = conn.execute(
@@ -217,12 +217,16 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         favicon=favicon,
                     ),
                 ).fetchone()
+
+                if ping_record_row is None:
+                    raise Exception("Failed to create a record of java_ping_records")
+
                 ping_record_id = str(ping_record_row[0])
 
-                ret_players_sample: list[JavaPingRecordPlayer] | None = (
-                    [] if players_sample is not None else None
-                )
+                ret_players_sample: list[JavaPingRecordPlayer] | None = None
                 if players_sample is not None:
+                    ret_players_sample = []
+
                     for player_sample in players_sample:
                         ping_record_player_row = conn.execute(
                             sql_text(
@@ -244,6 +248,12 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                                 name=player_sample.name,
                             ),
                         ).fetchone()
+
+                        if ping_record_player_row is None:
+                            raise Exception(
+                                "Failed to create a record of java_ping_record_players"
+                            )
+
                         ret_players_sample.append(
                             JavaPingRecordPlayer(
                                 id=str(ping_record_player_row[0]),

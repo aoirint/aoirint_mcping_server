@@ -22,7 +22,7 @@ logger = logging.Logger(name="bedrock_updater")
 
 class BedrockUpdaterConfig(BaseModel):
     database_url: str
-    interval: float
+    interval: int
     timeout: float
 
 
@@ -111,7 +111,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--interval",
-        type=float,
+        type=int,
         default=os.environ.get("MCPING_BEDROCK_UPDATER_INTERVAL", "300"),
     )
     parser.add_argument(
@@ -143,7 +143,7 @@ def main() -> None:
     log_level: int = args.log_level
     log_file: str | None = args.log_file
     database_url: str = args.database_url
-    interval: float = args.interval
+    interval: int = args.interval
     timeout: float = args.timeout
     loop: bool = args.loop
 

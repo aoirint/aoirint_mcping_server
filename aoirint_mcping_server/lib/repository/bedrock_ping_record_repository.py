@@ -135,7 +135,7 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
         motd: str | None,
         map: str | None,
         gamemode: str | None,
-    ):
+    ) -> BedrockPingRecord:
         with self.engine.connect() as conn:
             with conn.begin():
                 row = conn.execute(
@@ -188,6 +188,9 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                         gamemode=gamemode,
                     ),
                 ).fetchone()
+
+                if row is None:
+                    raise Exception("Failed to create a record of bedrock_ping_records")
 
                 return BedrockPingRecord(
                     id=str(row[0]),

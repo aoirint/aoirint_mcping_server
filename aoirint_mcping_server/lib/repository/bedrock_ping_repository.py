@@ -20,18 +20,18 @@ class BedrockPingResult(BaseModel):
     players_online: int
     players_max: int
     motd: str
-    map: str
-    gamemode: str
+    map: str | None
+    gamemode: str | None
 
 
 class BedrockPingRepository(ABC):
     @abstractmethod
-    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult | None:
+    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult:
         ...
 
 
 class BedrockPingRepositoryImpl(BedrockPingRepository):
-    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult | None:
+    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult:
         try:
             server = BedrockServer.lookup(address=f"{host}:{port}", timeout=timeout)
             response = server.status()

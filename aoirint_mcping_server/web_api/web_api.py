@@ -23,6 +23,8 @@ from ..lib.util.logging_utility import setup_logger
 
 logger = logging.Logger(name="web_api")
 
+FASTAPI_HEADER_NONE: str | None = Header(None)
+
 
 class WebApiConfig(BaseModel):
     host: str
@@ -34,10 +36,12 @@ class WebApiConfig(BaseModel):
     database_url: str
 
 
-def create_asgi_app(config: WebApiConfig):
+def create_asgi_app(config: WebApiConfig) -> FastAPI:
     app = FastAPI()
 
-    async def verify_read_api_key(x_read_api_key: str | None = Header(None)):
+    async def verify_read_api_key(
+        x_read_api_key: str | None = FASTAPI_HEADER_NONE,
+    ) -> str | None:
         # If config.read_api_key is not defined, everyone can read.
         if config.read_api_key is None or config.read_api_key == "":
             return x_read_api_key
@@ -46,7 +50,9 @@ def create_asgi_app(config: WebApiConfig):
             raise HTTPException(status_code=400, detail="X-Read-Api-Key header invalid")
         return x_read_api_key
 
-    async def verify_write_api_key(x_write_api_key: str | None = Header(None)):
+    async def verify_write_api_key(
+        x_write_api_key: str | None = FASTAPI_HEADER_NONE,
+    ) -> str | None:
         # If config.write_api_key is not defined, everyone can write.
         if config.write_api_key is None or config.write_api_key == "":
             return x_write_api_key
@@ -62,7 +68,7 @@ def create_asgi_app(config: WebApiConfig):
         response_model=list[BedrockServer],
         dependencies=[Depends(verify_read_api_key)],
     )
-    async def bedrock_server_list():
+    async def bedrock_server_list() -> list[BedrockServer]:
         bedrock_server_api = BedrockServerRepositoryImpl(
             database_url=config.database_url
         )
@@ -77,7 +83,7 @@ def create_asgi_app(config: WebApiConfig):
         name: str,
         host: str,
         port: int,
-    ):
+    ) -> BedrockServer:
         bedrock_server_api = BedrockServerRepositoryImpl(
             database_url=config.database_url
         )
@@ -97,7 +103,7 @@ def create_asgi_app(config: WebApiConfig):
         name: str,
         host: str,
         port: int,
-    ):
+    ) -> BedrockServer:
         bedrock_server_api = BedrockServerRepositoryImpl(
             database_url=config.database_url
         )
@@ -118,7 +124,7 @@ def create_asgi_app(config: WebApiConfig):
     )
     async def bedrock_server_delete(
         id: str,
-    ):
+    ) -> DeleteBedrockServerResponse:
         bedrock_server_api = BedrockServerRepositoryImpl(
             database_url=config.database_url
         )
@@ -136,7 +142,7 @@ def create_asgi_app(config: WebApiConfig):
     async def bedrock_ping_record_latest(
         bedrock_server_id: str,
         count: int = 5,
-    ):
+    ) -> list[BedrockPingRecord]:
         if count > config.max_latest_count:
             raise Exception(
                 f'"count" must be less than or equal to {config.max_latest_count}'
@@ -156,7 +162,7 @@ def create_asgi_app(config: WebApiConfig):
         response_model=list[JavaServer],
         dependencies=[Depends(verify_read_api_key)],
     )
-    async def java_server_list():
+    async def java_server_list() -> list[JavaServer]:
         java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
         return java_server_api.get_java_servers()
 
@@ -169,7 +175,7 @@ def create_asgi_app(config: WebApiConfig):
         name: str,
         host: str,
         port: int,
-    ):
+    ) -> JavaServer:
         java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
         return java_server_api.create_java_server(
             name=name,
@@ -187,7 +193,7 @@ def create_asgi_app(config: WebApiConfig):
         name: str,
         host: str,
         port: int,
-    ):
+    ) -> JavaServer:
         java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
         return java_server_api.update_java_server(
             id=id,
@@ -206,7 +212,7 @@ def create_asgi_app(config: WebApiConfig):
     )
     async def java_server_delete(
         id: str,
-    ):
+    ) -> DeleteJavaServerResponse:
         java_server_api = JavaServerRepositoryImpl(database_url=config.database_url)
         return DeleteJavaServerResponse(
             id=java_server_api.delete_java_server(
@@ -222,7 +228,7 @@ def create_asgi_app(config: WebApiConfig):
     async def java_ping_record_latest(
         java_server_id: str,
         count: int = 5,
-    ):
+    ) -> list[JavaPingRecord]:
         if count > config.max_latest_count:
             raise Exception(
                 f'"count" must be less than or equal to {config.max_latest_count}'
@@ -240,7 +246,7 @@ def create_asgi_app(config: WebApiConfig):
     return app
 
 
-def web_api_loop(config: WebApiConfig):
+def web_api_loop(config: WebApiConfig) -> None:
     uvicorn.run(
         create_asgi_app(config=config),
         host=config.host,

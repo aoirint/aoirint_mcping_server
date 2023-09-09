@@ -105,6 +105,9 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                     ),
                 ).fetchone()
 
+                if row is None:
+                    raise Exception("Failed to create a record of bedrock_servers")
+
                 return BedrockServer(
                     id=str(row[0]),
                     name=name,

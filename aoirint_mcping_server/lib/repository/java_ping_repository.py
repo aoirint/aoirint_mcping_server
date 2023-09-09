@@ -30,12 +30,12 @@ class JavaPingResult(BaseModel):
 
 class JavaPingRepository(ABC):
     @abstractmethod
-    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult | None:
+    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult:
         ...
 
 
 class JavaPingRepositoryImpl(JavaPingRepository):
-    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult | None:
+    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult:
         try:
             server = JavaServer.lookup(address=f"{host}:{port}", timeout=timeout)
             response = server.status()
