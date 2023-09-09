@@ -105,6 +105,9 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                     ),
                 ).fetchone()
 
+                if row is None:
+                    raise Exception("Failed to create a record of java_servers")
+
                 return JavaServer(
                     id=str(row[0]),
                     name=name,
