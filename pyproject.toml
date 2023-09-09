@@ -41,8 +41,8 @@ schedule = "^1.1.0"
 mcstatus = "^10.0.1"
 
 [tool.poetry.group.dev.dependencies]
-mypy = ">=0.900, <1.0"
-pysen = "^0.10.3"
+mypy = "^1.0"
+pysen = "^0.10.5"
 flake8 = "^6.0.0"
 flake8-bugbear = "^23.2.13"
 black = "^23.1.0"
