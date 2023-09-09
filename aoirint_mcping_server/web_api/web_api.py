@@ -23,6 +23,8 @@ from ..lib.util.logging_utility import setup_logger
 
 logger = logging.Logger(name="web_api")
 
+FASTAPI_HEADER_NONE: str | None = Header(None)
+
 
 class WebApiConfig(BaseModel):
     host: str
@@ -38,7 +40,7 @@ def create_asgi_app(config: WebApiConfig) -> FastAPI:
     app = FastAPI()
 
     async def verify_read_api_key(
-        x_read_api_key: str | None = Header(None),
+        x_read_api_key: str | None = FASTAPI_HEADER_NONE,
     ) -> str | None:
         # If config.read_api_key is not defined, everyone can read.
         if config.read_api_key is None or config.read_api_key == "":
@@ -49,7 +51,7 @@ def create_asgi_app(config: WebApiConfig) -> FastAPI:
         return x_read_api_key
 
     async def verify_write_api_key(
-        x_write_api_key: str | None = Header(None),
+        x_write_api_key: str | None = FASTAPI_HEADER_NONE,
     ) -> str | None:
         # If config.write_api_key is not defined, everyone can write.
         if config.write_api_key is None or config.write_api_key == "":
