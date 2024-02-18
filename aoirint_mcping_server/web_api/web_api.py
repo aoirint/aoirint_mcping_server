@@ -37,7 +37,10 @@ class WebApiConfig(BaseModel):
 
 
 def create_asgi_app(config: WebApiConfig) -> FastAPI:
-    app = FastAPI()
+    app = FastAPI(
+        title="aoirint_mcping_server Web API",
+        version=APP_VERSION,
+    )
 
     async def verify_read_api_key(
         x_read_api_key: str | None = FASTAPI_HEADER_NONE,
