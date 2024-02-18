@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
-from .. import __VERSION__
+from .. import __version__ as APP_VERSION
 from ..lib.repository.bedrock_ping_record_repository import (
     BedrockPingRecord,
     BedrockPingRecordRepositoryImpl,
@@ -37,7 +37,10 @@ class WebApiConfig(BaseModel):
 
 
 def create_asgi_app(config: WebApiConfig) -> FastAPI:
-    app = FastAPI()
+    app = FastAPI(
+        title="aoirint_mcping_server Web API",
+        version=APP_VERSION,
+    )
 
     async def verify_read_api_key(
         x_read_api_key: str | None = FASTAPI_HEADER_NONE,
@@ -305,7 +308,7 @@ def main() -> None:
         default=os.environ.get("MCPING_WEB_API_LOG_FILE"),
     )
     parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__VERSION__}"
+        "--version", action="version", version=f"%(prog)s {APP_VERSION}"
     )
     args = parser.parse_args()
 

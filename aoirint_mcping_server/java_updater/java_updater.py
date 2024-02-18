@@ -5,7 +5,7 @@ import time
 import schedule
 from pydantic import BaseModel
 
-from .. import __VERSION__
+from .. import __version__ as APP_VERSION
 from ..lib.repository.java_ping_record_repository import (
     CreateJavaPingRecordJavaPingRecordPlayer,
     JavaPingRecordRepositoryImpl,
@@ -140,7 +140,7 @@ def main() -> None:
         default=os.environ.get("MCPING_JAVA_UPDATER_LOG_FILE"),
     )
     parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__VERSION__}"
+        "--version", action="version", version=f"%(prog)s {APP_VERSION}"
     )
     args = parser.parse_args()
 
