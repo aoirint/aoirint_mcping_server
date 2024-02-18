@@ -15,7 +15,7 @@ py_version = "py311"
 
 [tool.poetry]
 name = "aoirint-mcping-server"
-version = "0.1.0"
+version = "0.0.0"
 description = ""
 authors = ["aoirint <aoirint@gmail.com>"]
 readme = "README.md"
