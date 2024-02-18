@@ -5,7 +5,7 @@ import uvicorn
 from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
-from .. import __VERSION__
+from .. import __version__
 from ..lib.repository.bedrock_ping_record_repository import (
     BedrockPingRecord,
     BedrockPingRecordRepositoryImpl,
@@ -305,7 +305,7 @@ def main() -> None:
         default=os.environ.get("MCPING_WEB_API_LOG_FILE"),
     )
     parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__VERSION__}"
+        "--version", action="version", version=f"%(prog)s {__version__}"
     )
     args = parser.parse_args()
 
