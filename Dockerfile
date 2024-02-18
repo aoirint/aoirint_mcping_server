@@ -76,6 +76,18 @@ RUN <<EOF
     useradd --non-unique --uid "${CONTAINER_UID}" --gid "${CONTAINER_GID}" --create-home user
 EOF
 
+ARG POETRY_VERSION=1.7.1
+RUN <<EOF
+    set -eu
+
+    gosu user pip install "poetry==${POETRY_VERSION}"
+
+    gosu user poetry config virtualenvs.in-project true
+
+    mkdir -p /home/user/.cache/pypoetry/{cache,artifacts}
+    chown -R "${CONTAINER_UID}:${CONTAINER_GID}" /home/user/.cache
+EOF
+
 
 FROM base-env AS bedrock-updater-runtime-env
 
