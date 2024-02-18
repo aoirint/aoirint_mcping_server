@@ -5,7 +5,7 @@ import time
 import schedule
 from pydantic import BaseModel
 
-from .. import __version__
+from .. import __version__ as APP_VERSION
 from ..lib.repository.bedrock_ping_record_repository import (
     BedrockPingRecordRepositoryImpl,
 )
@@ -136,7 +136,7 @@ def main() -> None:
         default=os.environ.get("MCPING_BEDROCK_UPDATER_LOG_FILE"),
     )
     parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {__version__}"
+        "--version", action="version", version=f"%(prog)s {APP_VERSION}"
     )
     args = parser.parse_args()
 
