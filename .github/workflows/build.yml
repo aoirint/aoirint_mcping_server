@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v5
         env:
           IMAGE_NAME_AND_TAG: ${{ format('{0}_{1}:{2}', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix, env.IMAGE_TAG) }}
-          IMAGE_CACHE_FROM: ${{ format('type=registry,ref={0}_{1}:latest-buildcache,mode=max', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix) }}
+          IMAGE_CACHE_FROM: ${{ format('type=registry,ref={0}_{1}:latest-buildcache', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix) }}
           IMAGE_CACHE_TO: ${{ env.IMAGE_TAG == 'latest' && format('type=registry,ref={0}_{1}:latest-buildcache,mode=max', env.IMAGE_NAME_PREFIX, matrix.image_name_suffix) || '' }}
         with:
           context: .
