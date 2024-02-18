@@ -67,11 +67,13 @@ RUN <<EOF
     rm -rf /var/apt/lists/*
 EOF
 
+ARG CONTAINER_UID=1000
+ARG CONTAINER_GID=1000
 RUN <<EOF
     set -eu
 
-    groupadd -o -g 1000 user
-    useradd -o -m -u 1000 -g user user
+    groupadd --non-unique --gid "${CONTAINER_GID}" user
+    useradd --non-unique --uid "${CONTAINER_UID}" --gid "${CONTAINER_GID}" --create-home user
 EOF
 
 
