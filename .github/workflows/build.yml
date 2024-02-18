@@ -105,17 +105,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Poetry
+        shell: bash
+        run: pipx install poetry
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "${{ env.PYTHON_VERSION }}"
-          cache: 'pip'
-          cache-dependency-path: '**/requirements-dev.txt'
+          cache: 'poetry'
 
       - name: Install Dependencies
         shell: bash
-        run: |
-          pip3 install -r requirements-dev.txt
+        run: poetry install
 
       - name: Install gsed for macOS
         if: startsWith(matrix.os, 'macos-')
@@ -132,9 +134,9 @@ jobs:
       - name: Build Binary
         shell: bash
         run: |
-          pyinstaller --name "aoirint_mcping_server_web_api" --onefile "aoirint_mcping_server_web_api.py"
-          pyinstaller --name "aoirint_mcping_server_bedrock_updater" --onefile "aoirint_mcping_server_bedrock_updater.py"
-          pyinstaller --name "aoirint_mcping_server_java_updater" --onefile "aoirint_mcping_server_java_updater.py"
+          poetry run pyinstaller --name "aoirint_mcping_server_web_api" --onefile "aoirint_mcping_server_web_api.py"
+          poetry run pyinstaller --name "aoirint_mcping_server_bedrock_updater" --onefile "aoirint_mcping_server_bedrock_updater.py"
+          poetry run pyinstaller --name "aoirint_mcping_server_java_updater" --onefile "aoirint_mcping_server_java_updater.py"
 
       - name: Set asset-basename
         id: asset-basename
