@@ -47,12 +47,3 @@ docker compose run --rm migrate -path=/migrations -database="postgres://postgres
 ## Library management
 
 This repository uses [Poetry](https://github.com/python-poetry/poetry).
-
-To dump `requirements*.txt`,
-
-```shell
-poetry export --without-hashes --with web-api -o requirements-web-api.txt
-poetry export --without-hashes --with bedrock-updater -o requirements-bedrock-updater.txt
-poetry export --without-hashes --with java-updater -o requirements-java-updater.txt
-poetry export --without-hashes --with dev,web-api,bedrock-updater,java-updater -o requirements-dev.txt
-```
