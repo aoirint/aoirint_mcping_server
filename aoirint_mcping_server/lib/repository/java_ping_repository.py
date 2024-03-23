@@ -30,8 +30,7 @@ class JavaPingResult(BaseModel):
 
 class JavaPingRepository(ABC):
     @abstractmethod
-    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult:
-        ...
+    def ping(self, host: str, port: int, timeout: float) -> JavaPingResult: ...
 
 
 class JavaPingRepositoryImpl(JavaPingRepository):
