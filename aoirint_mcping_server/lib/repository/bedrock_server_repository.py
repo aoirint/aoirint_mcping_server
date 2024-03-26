@@ -14,8 +14,7 @@ class BedrockServer(BaseModel):
 
 class BedrockServerRepository(ABC):
     @abstractmethod
-    def get_bedrock_servers(self) -> list[BedrockServer]:
-        ...
+    def get_bedrock_servers(self) -> list[BedrockServer]: ...
 
     @abstractmethod
     def create_bedrock_server(
@@ -23,8 +22,7 @@ class BedrockServerRepository(ABC):
         name: str,
         host: str,
         port: int,
-    ) -> BedrockServer:
-        ...
+    ) -> BedrockServer: ...
 
     @abstractmethod
     def update_bedrock_server(
@@ -33,15 +31,13 @@ class BedrockServerRepository(ABC):
         name: str,
         host: str,
         port: int,
-    ) -> BedrockServer:
-        ...
+    ) -> BedrockServer: ...
 
     @abstractmethod
     def delete_bedrock_server(
         self,
         id: str,
-    ) -> str:
-        ...
+    ) -> str: ...
 
 
 class BedrockServerRepositoryImpl(BedrockServerRepository):

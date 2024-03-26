@@ -30,8 +30,7 @@ class BedrockPingRecordRepository(ABC):
         self,
         bedrock_server_id: str,
         count: int,
-    ) -> list[BedrockPingRecord]:
-        ...
+    ) -> list[BedrockPingRecord]: ...
 
     @abstractmethod
     def create_bedrock_ping_record(
@@ -49,8 +48,7 @@ class BedrockPingRecordRepository(ABC):
         motd: str | None,
         map: str | None,
         gamemode: str | None,
-    ) -> BedrockPingRecord:
-        ...
+    ) -> BedrockPingRecord: ...
 
 
 class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):

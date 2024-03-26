@@ -14,8 +14,7 @@ class JavaServer(BaseModel):
 
 class JavaServerRepository(ABC):
     @abstractmethod
-    def get_java_servers(self) -> list[JavaServer]:
-        ...
+    def get_java_servers(self) -> list[JavaServer]: ...
 
     @abstractmethod
     def create_java_server(
@@ -23,8 +22,7 @@ class JavaServerRepository(ABC):
         name: str,
         host: str,
         port: int,
-    ) -> JavaServer:
-        ...
+    ) -> JavaServer: ...
 
     @abstractmethod
     def update_java_server(
@@ -33,15 +31,13 @@ class JavaServerRepository(ABC):
         name: str,
         host: str,
         port: int,
-    ) -> JavaServer:
-        ...
+    ) -> JavaServer: ...
 
     @abstractmethod
     def delete_java_server(
         self,
         id: str,
-    ) -> str:
-        ...
+    ) -> str: ...
 
 
 class JavaServerRepositoryImpl(JavaServerRepository):

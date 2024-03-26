@@ -41,8 +41,7 @@ class JavaPingRecordRepository(ABC):
         self,
         java_server_id: str,
         count: int,
-    ) -> list[JavaPingRecord]:
-        ...
+    ) -> list[JavaPingRecord]: ...
 
     @abstractmethod
     def create_java_ping_record(
@@ -59,8 +58,7 @@ class JavaPingRecordRepository(ABC):
         players_sample: list[CreateJavaPingRecordJavaPingRecordPlayer] | None,
         description: str | None,
         favicon: str | None,
-    ) -> JavaPingRecord:
-        ...
+    ) -> JavaPingRecord: ...
 
 
 class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):

@@ -26,8 +26,7 @@ class BedrockPingResult(BaseModel):
 
 class BedrockPingRepository(ABC):
     @abstractmethod
-    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult:
-        ...
+    def ping(self, host: str, port: int, timeout: float) -> BedrockPingResult: ...
 
 
 class BedrockPingRepositoryImpl(BedrockPingRepository):
