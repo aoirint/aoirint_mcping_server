@@ -32,11 +32,11 @@ fastapi = "^0.111.0"
 uvicorn = {extras = ["standard"], version = "^0.30.0"}
 
 [tool.poetry.group.bedrock-updater.dependencies]
-schedule = "^1.1.0"
+schedule = "^1.2.2"
 mcstatus = "^10.0.1"
 
 [tool.poetry.group.java-updater.dependencies]
-schedule = "^1.1.0"
+schedule = "^1.2.2"
 mcstatus = "^10.0.1"
 
 [tool.poetry.group.dev.dependencies]
