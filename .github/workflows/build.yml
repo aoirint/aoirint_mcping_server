@@ -96,7 +96,7 @@ jobs:
             asset_name_prefix: aoirint_mcping_server-windows-amd64
             sed: 'sed'
           -
-            os: 'macos-11'
+            os: 'macos-12'
             asset_name_prefix: aoirint_mcping_server-macos-amd64
             sed: 'gsed'
 
