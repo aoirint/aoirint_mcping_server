@@ -25,7 +25,7 @@ packages = [{include = "aoirint_mcping_server"}]
 python = "~3.11"
 pydantic = "^2.7.1"
 sqlalchemy = "^2.0.30"
-psycopg2-binary = "^2.9.5"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.web-api.dependencies]
 fastapi = "^0.109.1"
