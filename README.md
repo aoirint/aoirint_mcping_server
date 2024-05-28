@@ -8,8 +8,8 @@
 
 ## Supported Minecraft server versions
 
-- Bedrock 1.19.x
-- Java 1.19.x
+- Bedrock 1.20.x
+- Java 1.20.x
 
 ## Deploy
 
