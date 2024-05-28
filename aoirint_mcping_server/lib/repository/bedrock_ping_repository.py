@@ -42,7 +42,7 @@ class BedrockPingRepositoryImpl(BedrockPingRepository):
                 latency=response.latency,
                 players_online=response.players_online,
                 players_max=response.players_max,
-                motd=response.motd,
+                motd=response.description,
                 map=response.map,
                 gamemode=response.gamemode,
             )
