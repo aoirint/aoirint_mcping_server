@@ -13,7 +13,7 @@ env:
   VERSION: ${{ (github.event.release.tag_name != '' && github.event.release.tag_name) || '0.0.0' }}
   IMAGE_NAME_PREFIX: aoirint/aoirint_mcping_server
   IMAGE_TAG: ${{ github.event.release.tag_name != '' && github.event.release.tag_name || 'latest' }}
-  PYTHON_VERSION: '3.11.8'
+  PYTHON_VERSION: '3.11.9'
 
 jobs:
   docker-build-and-push:
