@@ -1,5 +1,5 @@
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 88
 
 [tool.ruff.lint]
@@ -26,7 +26,7 @@ readme = "README.md"
 packages = [{include = "aoirint_mcping_server"}]
 
 [tool.poetry.dependencies]
-python = "~3.11"
+python = "~3.12"
 pydantic = "^2.7.1"
 sqlalchemy = "^2.0.30"
 psycopg2-binary = "^2.9.9"
