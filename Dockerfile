@@ -1,54 +1,7 @@
 # syntax=docker/dockerfile:1.11
-ARG BASE_IMAGE=ubuntu:24.04
-ARG BASE_RUNTIME_IMAGE=${BASE_IMAGE}
+ARG BASE_IMAGE=python:3.12
 
-FROM ${BASE_IMAGE} AS python-env
-
-ARG DEBIAN_FRONTEND=noninteractive
-ARG PYENV_VERSION=v2.4.1
-ARG PYTHON_VERSION=3.11.9
-
-RUN <<EOF
-    set -eu
-
-    apt-get update
-
-    apt-get install -y \
-        build-essential \
-        libssl-dev \
-        zlib1g-dev \
-        libbz2-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        curl \
-        libncursesw5-dev \
-        xz-utils \
-        tk-dev \
-        libxml2-dev \
-        libxmlsec1-dev \
-        libffi-dev \
-        liblzma-dev \
-        git
-
-    apt-get clean
-    rm -rf /var/lib/apt/lists/*
-EOF
-
-RUN <<EOF
-    set -eu
-
-    git clone https://github.com/pyenv/pyenv.git /opt/pyenv
-    cd /opt/pyenv
-    git checkout "${PYENV_VERSION}"
-
-    PREFIX=/opt/python-build /opt/pyenv/plugins/python-build/install.sh
-    /opt/python-build/bin/python-build -v "${PYTHON_VERSION}" /opt/python
-
-    rm -rf /opt/python-build /opt/pyenv
-EOF
-
-
-FROM ${BASE_RUNTIME_IMAGE} AS base-env
+FROM ${BASE_IMAGE} AS base-env
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1

@@ -5,9 +5,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.11.9'
-
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -22,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "${{ env.PYTHON_VERSION }}"
+          python-version: "3.12"
           cache: 'poetry'
 
       - name: Install Dependencies
