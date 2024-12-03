@@ -45,7 +45,7 @@ mcstatus = "^11.1.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.13.0"
-pyinstaller = "^6.7.0"
+pyinstaller = "^6.11.1"
 wheel = "^0.43.0"
 types-pyyaml = "^6.0.12.20240311"
 ruff = "^0.8.1"
