@@ -32,7 +32,7 @@ sqlalchemy = "^2.0.36"
 psycopg2-binary = "^2.9.10"
 
 [tool.poetry.group.web-api.dependencies]
-fastapi = "^0.111.0"
+fastapi = {extras = ["standard"], version = "^0.115.5"}
 uvicorn = {extras = ["standard"], version = "^0.30.0"}
 
 [tool.poetry.group.bedrock-updater.dependencies]
