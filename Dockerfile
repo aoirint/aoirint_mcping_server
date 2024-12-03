@@ -5,17 +5,17 @@ FROM ${BASE_IMAGE} AS base-env
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
-ENV PATH=/code/aoirint_mcping_server/.venv/bin:/home/user/.local/bin:/opt/python/bin:${PATH}
-
-COPY --from=python-env /opt/python /opt/python
+ENV PATH=/code/aoirint_mcping_server/.venv/bin:/home/user/.local/bin:${PATH}
 
 RUN <<EOF
     set -eu
 
     apt-get update
+
     apt-get install -y \
         openssl \
         gosu
+
     apt-get clean
     rm -rf /var/apt/lists/*
 EOF
