@@ -50,19 +50,17 @@ class JavaPingRepositoryImpl(JavaPingRepository):
                 latency=response.latency,
                 players_online=response.players.online,
                 players_max=response.players.max,
-                players_sample=list(
-                    map(
-                        lambda player_sample: JavaPingResultPlayer(
-                            id=player_sample.id,
-                            name=player_sample.name,
-                        ),
-                        players_sample,
+                players_sample=[
+                    JavaPingResultPlayer(
+                        id=player_sample.id,
+                        name=player_sample.name,
                     )
-                ),
+                    for player_sample in players_sample
+                ],
                 description=response.description,
                 favicon=response.favicon,
             )
-        except TimeoutError:
-            raise JavaPingTimeoutError
-        except ConnectionRefusedError:
-            raise JavaPingRefusedError
+        except TimeoutError as error:
+            raise JavaPingTimeoutError from error
+        except ConnectionRefusedError as error:
+            raise JavaPingRefusedError from error

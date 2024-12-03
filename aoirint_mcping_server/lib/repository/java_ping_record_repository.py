@@ -95,10 +95,10 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         LIMIT :count
                     """,
                 ),
-                parameters=dict(
-                    java_server_id=java_server_id,
-                    count=count,
-                ),
+                parameters={
+                    "java_server_id": java_server_id,
+                    "count": count,
+                },
             ).fetchall()
 
             ping_records: list[JavaPingRecord] = []
@@ -117,9 +117,9 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                                 "java_ping_record_id" = :java_ping_record_id
                         """,
                     ),
-                    parameters=dict(
-                        java_ping_record_id=ping_record_id,
-                    ),
+                    parameters={
+                        "java_ping_record_id": ping_record_id,
+                    },
                 ).fetchall()
 
                 ping_records.append(
@@ -134,17 +134,15 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                         latency=ping_record_row[6],
                         players_online=ping_record_row[7],
                         players_max=ping_record_row[8],
-                        players_sample=list(
-                            map(
-                                lambda player_row: JavaPingRecordPlayer(
-                                    id=str(player_row[0]),
-                                    java_ping_record_id=ping_record_id,
-                                    player_id=player_row[1],
-                                    name=player_row[2],
-                                ),
-                                player_rows,
+                        players_sample=[
+                            JavaPingRecordPlayer(
+                                id=str(player_row[0]),
+                                java_ping_record_id=ping_record_id,
+                                player_id=player_row[1],
+                                name=player_row[2],
                             )
-                        ),
+                            for player_row in player_rows
+                        ],
                         description=ping_record_row[9],
                         favicon=ping_record_row[10],
                         created_at=ping_record_row[11].isoformat(),
@@ -201,19 +199,19 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                             ) RETURNING "id", "created_at", "updated_at"
                         """,
                     ),
-                    parameters=dict(
-                        java_server_id=java_server_id,
-                        timeout=timeout,
-                        is_timeout=is_timeout,
-                        is_refused=is_refused,
-                        version_protocol=version_protocol,
-                        version_name=version_name,
-                        latency=latency,
-                        players_online=players_online,
-                        players_max=players_max,
-                        description=description,
-                        favicon=favicon,
-                    ),
+                    parameters={
+                        "java_server_id": java_server_id,
+                        "timeout": timeout,
+                        "is_timeout": is_timeout,
+                        "is_refused": is_refused,
+                        "version_protocol": version_protocol,
+                        "version_name": version_name,
+                        "latency": latency,
+                        "players_online": players_online,
+                        "players_max": players_max,
+                        "description": description,
+                        "favicon": favicon,
+                    },
                 ).fetchone()
 
                 if ping_record_row is None:
@@ -240,11 +238,11 @@ class JavaPingRecordRepositoryImpl(JavaPingRecordRepository):
                                     ) RETURNING id
                                 """,
                             ),
-                            parameters=dict(
-                                java_ping_record_id=ping_record_id,
-                                player_id=player_sample.player_id,
-                                name=player_sample.name,
-                            ),
+                            parameters={
+                                "java_ping_record_id": ping_record_id,
+                                "player_id": player_sample.player_id,
+                                "name": player_sample.name,
+                            },
                         ).fetchone()
 
                         if ping_record_player_row is None:

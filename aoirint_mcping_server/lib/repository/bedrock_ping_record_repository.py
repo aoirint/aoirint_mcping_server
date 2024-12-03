@@ -88,35 +88,33 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                         LIMIT :count
                     """,
                 ),
-                parameters=dict(
-                    bedrock_server_id=bedrock_server_id,
-                    count=count,
-                ),
+                parameters={
+                    "bedrock_server_id": bedrock_server_id,
+                    "count": count,
+                },
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: BedrockPingRecord(
-                        id=str(row[0]),
-                        bedrock_server_id=str(row[1]),
-                        timeout=row[2],
-                        is_timeout=row[3],
-                        is_refused=row[4],
-                        version_protocol=row[5],
-                        version_brand=row[6],
-                        version_version=row[7],
-                        latency=row[8],
-                        players_online=row[9],
-                        players_max=row[10],
-                        motd=row[11],
-                        map=row[12],
-                        gamemode=row[13],
-                        created_at=row[14].isoformat(),
-                        updated_at=row[15].isoformat(),
-                    ),
-                    rows,
-                ),
-            )
+            return [
+                BedrockPingRecord(
+                    id=str(row[0]),
+                    bedrock_server_id=str(row[1]),
+                    timeout=row[2],
+                    is_timeout=row[3],
+                    is_refused=row[4],
+                    version_protocol=row[5],
+                    version_brand=row[6],
+                    version_version=row[7],
+                    latency=row[8],
+                    players_online=row[9],
+                    players_max=row[10],
+                    motd=row[11],
+                    map=row[12],
+                    gamemode=row[13],
+                    created_at=row[14].isoformat(),
+                    updated_at=row[15].isoformat(),
+                )
+                for row in rows
+            ]
 
     def create_bedrock_ping_record(
         self,
@@ -170,21 +168,21 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                             ) RETURNING "id", "created_at", "updated_at"
                         """,
                     ),
-                    parameters=dict(
-                        bedrock_server_id=bedrock_server_id,
-                        timeout=timeout,
-                        is_timeout=is_timeout,
-                        is_refused=is_refused,
-                        version_protocol=version_protocol,
-                        version_brand=version_brand,
-                        version_version=version_version,
-                        latency=latency,
-                        players_online=players_online,
-                        players_max=players_max,
-                        motd=motd,
-                        map=map,
-                        gamemode=gamemode,
-                    ),
+                    parameters={
+                        "bedrock_server_id": bedrock_server_id,
+                        "timeout": timeout,
+                        "is_timeout": is_timeout,
+                        "is_refused": is_refused,
+                        "version_protocol": version_protocol,
+                        "version_brand": version_brand,
+                        "version_version": version_version,
+                        "latency": latency,
+                        "players_online": players_online,
+                        "players_max": players_max,
+                        "motd": motd,
+                        "map": map,
+                        "gamemode": gamemode,
+                    },
                 ).fetchone()
 
                 if row is None:

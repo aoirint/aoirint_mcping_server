@@ -52,15 +52,13 @@ def update(config: JavaUpdaterConfig) -> None:
                 latency=ping_result.latency,
                 players_online=ping_result.players_online,
                 players_max=ping_result.players_max,
-                players_sample=list(
-                    map(
-                        lambda player_sample: CreateJavaPingRecordJavaPingRecordPlayer(
-                            player_id=player_sample.id,
-                            name=player_sample.name,
-                        ),
-                        ping_result.players_sample,
+                players_sample=[
+                    CreateJavaPingRecordJavaPingRecordPlayer(
+                        player_id=player_sample.id,
+                        name=player_sample.name,
                     )
-                ),
+                    for player_sample in ping_result.players_sample
+                ],
                 description=ping_result.description,
                 favicon=ping_result.favicon,
             )

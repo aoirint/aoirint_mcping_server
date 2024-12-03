@@ -5,6 +5,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -13,7 +17,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Poetry
-        shell: bash
         run: pipx install poetry
 
       - name: Setup Python
@@ -23,9 +26,10 @@ jobs:
           cache: 'poetry'
 
       - name: Install Dependencies
-        shell: bash
         run: poetry install
 
       - name: Run lint
-        shell: bash
-        run: poetry run pysen run lint
+        run: poetry run ruff check
+
+      - name: Run type check
+        run: poetry run mypy .
