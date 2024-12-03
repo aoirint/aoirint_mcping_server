@@ -22,18 +22,18 @@ jobs:
       matrix:
         include:
           -
-            base_image: 'ubuntu:20.04'
-            base_runtime_image: 'ubuntu:20.04'
+            base_image: 'ubuntu:24.04'
+            base_runtime_image: 'ubuntu:24.04'
             image_name_suffix: 'web_api'
             image_target: 'web-api-runtime-env'
           -
-            base_image: 'ubuntu:20.04'
-            base_runtime_image: 'ubuntu:20.04'
+            base_image: 'ubuntu:24.04'
+            base_runtime_image: 'ubuntu:24.04'
             image_name_suffix: 'bedrock_updater'
             image_target: 'bedrock-updater-runtime-env'
           -
-            base_image: 'ubuntu:20.04'
-            base_runtime_image: 'ubuntu:20.04'
+            base_image: 'ubuntu:24.04'
+            base_runtime_image: 'ubuntu:24.04'
             image_name_suffix: 'java_updater'
             image_target: 'java-updater-runtime-env'
 
