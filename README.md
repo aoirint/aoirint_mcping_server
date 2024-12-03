@@ -46,7 +46,7 @@ docker compose run --rm migrate -path=/migrations -database="postgres://postgres
 
 ## Library management
 
-- Python 3.11
+- Python 3.12
 
 This repository uses [Poetry](https://github.com/python-poetry/poetry).
 
