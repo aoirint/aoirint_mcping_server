@@ -46,7 +46,7 @@ class BedrockPingRepositoryImpl(BedrockPingRepository):
                 map=response.map,
                 gamemode=response.gamemode,
             )
-        except TimeoutError:
-            raise BedrockPingTimeoutError
-        except ConnectionRefusedError:
-            raise BedrockPingRefusedError
+        except TimeoutError as error:
+            raise BedrockPingTimeoutError from error
+        except ConnectionRefusedError as error:
+            raise BedrockPingRefusedError from error

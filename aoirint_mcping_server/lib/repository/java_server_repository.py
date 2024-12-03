@@ -60,17 +60,15 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                 ),
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: JavaServer(
-                        id=str(row[0]),
-                        name=row[1],
-                        host=row[2],
-                        port=row[3],
-                    ),
-                    rows,
+            return [
+                JavaServer(
+                    id=str(row[0]),
+                    name=row[1],
+                    host=row[2],
+                    port=row[3],
                 )
-            )
+                for row in rows
+            ]
 
     def create_java_server(
         self,
@@ -94,11 +92,11 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             ) RETURNING id
                         """,
                     ),
-                    parameters=dict(
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchone()
 
                 if row is None:
@@ -133,12 +131,12 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             RETURNING "id"
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "id": id,
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchall()
 
                 if len(rows) != 1:
@@ -164,9 +162,9 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             WHERE id=:id
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                    ),
+                    parameters={
+                        "id": id,
+                    },
                 )
 
                 return id

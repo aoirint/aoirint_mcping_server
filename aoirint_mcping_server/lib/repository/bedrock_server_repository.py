@@ -60,17 +60,15 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                 ),
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: BedrockServer(
-                        id=str(row[0]),
-                        name=row[1],
-                        host=row[2],
-                        port=row[3],
-                    ),
-                    rows,
+            return [
+                BedrockServer(
+                    id=str(row[0]),
+                    name=row[1],
+                    host=row[2],
+                    port=row[3],
                 )
-            )
+                for row in rows
+            ]
 
     def create_bedrock_server(
         self,
@@ -94,11 +92,11 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                             ) RETURNING id
                         """,
                     ),
-                    parameters=dict(
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchone()
 
                 if row is None:
@@ -133,12 +131,12 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                             RETURNING "id"
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "id": id,
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchall()
 
                 if len(rows) != 1:
@@ -164,9 +162,9 @@ class BedrockServerRepositoryImpl(BedrockServerRepository):
                             WHERE id=:id
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                    ),
+                    parameters={
+                        "id": id,
+                    },
                 )
 
                 return id
