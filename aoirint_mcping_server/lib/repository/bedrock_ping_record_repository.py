@@ -94,29 +94,27 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                 },
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: BedrockPingRecord(
-                        id=str(row[0]),
-                        bedrock_server_id=str(row[1]),
-                        timeout=row[2],
-                        is_timeout=row[3],
-                        is_refused=row[4],
-                        version_protocol=row[5],
-                        version_brand=row[6],
-                        version_version=row[7],
-                        latency=row[8],
-                        players_online=row[9],
-                        players_max=row[10],
-                        motd=row[11],
-                        map=row[12],
-                        gamemode=row[13],
-                        created_at=row[14].isoformat(),
-                        updated_at=row[15].isoformat(),
-                    ),
-                    rows,
-                ),
-            )
+            return [
+                BedrockPingRecord(
+                    id=str(row[0]),
+                    bedrock_server_id=str(row[1]),
+                    timeout=row[2],
+                    is_timeout=row[3],
+                    is_refused=row[4],
+                    version_protocol=row[5],
+                    version_brand=row[6],
+                    version_version=row[7],
+                    latency=row[8],
+                    players_online=row[9],
+                    players_max=row[10],
+                    motd=row[11],
+                    map=row[12],
+                    gamemode=row[13],
+                    created_at=row[14].isoformat(),
+                    updated_at=row[15].isoformat(),
+                )
+                for row in rows
+            ]
 
     def create_bedrock_ping_record(
         self,

@@ -60,17 +60,15 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                 ),
             ).fetchall()
 
-            return list(
-                map(
-                    lambda row: JavaServer(
-                        id=str(row[0]),
-                        name=row[1],
-                        host=row[2],
-                        port=row[3],
-                    ),
-                    rows,
+            return [
+                JavaServer(
+                    id=str(row[0]),
+                    name=row[1],
+                    host=row[2],
+                    port=row[3],
                 )
-            )
+                for row in rows
+            ]
 
     def create_java_server(
         self,
