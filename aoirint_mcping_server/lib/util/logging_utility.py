@@ -1,5 +1,5 @@
-import datetime
 import logging
+from datetime import UTC, datetime
 
 
 class Iso8601WithTimezoneFormatter(logging.Formatter):
@@ -9,7 +9,7 @@ class Iso8601WithTimezoneFormatter(logging.Formatter):
         datefmt: str | None = None,
     ) -> str:
         return (
-            datetime.datetime.fromtimestamp(record.created, datetime.timezone.utc)
+            datetime.fromtimestamp(record.created, UTC)
             .astimezone()
             .isoformat(sep="T", timespec="milliseconds")
         )

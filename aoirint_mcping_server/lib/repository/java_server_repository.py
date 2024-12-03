@@ -94,11 +94,11 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             ) RETURNING id
                         """,
                     ),
-                    parameters=dict(
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchone()
 
                 if row is None:
@@ -133,12 +133,12 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             RETURNING "id"
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                        name=name,
-                        host=host,
-                        port=port,
-                    ),
+                    parameters={
+                        "id": id,
+                        "name": name,
+                        "host": host,
+                        "port": port,
+                    },
                 ).fetchall()
 
                 if len(rows) != 1:
@@ -164,9 +164,9 @@ class JavaServerRepositoryImpl(JavaServerRepository):
                             WHERE id=:id
                         """,
                     ),
-                    parameters=dict(
-                        id=id,
-                    ),
+                    parameters={
+                        "id": id,
+                    },
                 )
 
                 return id

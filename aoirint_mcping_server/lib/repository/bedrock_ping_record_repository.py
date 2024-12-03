@@ -88,10 +88,10 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                         LIMIT :count
                     """,
                 ),
-                parameters=dict(
-                    bedrock_server_id=bedrock_server_id,
-                    count=count,
-                ),
+                parameters={
+                    "bedrock_server_id": bedrock_server_id,
+                    "count": count,
+                },
             ).fetchall()
 
             return list(
@@ -170,21 +170,21 @@ class BedrockPingRecordRepositoryImpl(BedrockPingRecordRepository):
                             ) RETURNING "id", "created_at", "updated_at"
                         """,
                     ),
-                    parameters=dict(
-                        bedrock_server_id=bedrock_server_id,
-                        timeout=timeout,
-                        is_timeout=is_timeout,
-                        is_refused=is_refused,
-                        version_protocol=version_protocol,
-                        version_brand=version_brand,
-                        version_version=version_version,
-                        latency=latency,
-                        players_online=players_online,
-                        players_max=players_max,
-                        motd=motd,
-                        map=map,
-                        gamemode=gamemode,
-                    ),
+                    parameters={
+                        "bedrock_server_id": bedrock_server_id,
+                        "timeout": timeout,
+                        "is_timeout": is_timeout,
+                        "is_refused": is_refused,
+                        "version_protocol": version_protocol,
+                        "version_brand": version_brand,
+                        "version_version": version_version,
+                        "latency": latency,
+                        "players_online": players_online,
+                        "players_max": players_max,
+                        "motd": motd,
+                        "map": map,
+                        "gamemode": gamemode,
+                    },
                 ).fetchone()
 
                 if row is None:
